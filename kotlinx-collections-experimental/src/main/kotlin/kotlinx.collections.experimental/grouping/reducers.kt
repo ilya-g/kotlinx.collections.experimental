@@ -69,6 +69,11 @@ object StringJoin {
         override fun invoke(p1: StringBuilder, p2: T): StringBuilder = p1.append(delimiter).append(p2.toString())
         override fun final(result: StringBuilder): String = result.toString()
     }
+    fun <T> with(delimiter: String, prefix: String, suffix: String) = object : RReducer<String, StringBuilder, T> {
+        override fun initial(item: T): StringBuilder = StringBuilder().append(prefix).append(item.toString())
+        override fun invoke(p1: StringBuilder, p2: T): StringBuilder = p1.append(delimiter).append(p2.toString())
+        override fun final(result: StringBuilder): String = result.append(suffix).toString()
+    }
 }
 
 
