@@ -1,5 +1,7 @@
 package kotlinx.collections.experimental.grouping
 
+import kotlin.jvm.internal.NonVolatileRef.IntRef
+
 
 public interface Grouping<T, out K> {
     fun iterator(): Iterator<T>
@@ -51,10 +53,17 @@ public inline fun <T, K, R> Grouping<T, K>.fold(initialValueSelector: (K, T) -> 
 public inline fun <T, K, R> Grouping<T, K>.fold(initialValue: R, operation: (R, T) -> R): Map<K, R> =
         aggregate { k, v, e, first -> operation(if (first) initialValue else v as R, e) }
 
-public /*inline*/ fun <T, K, R> Grouping<T, K>.reduce(reducer: Reducer<R, T>): Map<K, R> =
-        aggregate<T, K, R> { k, v, e, first -> if (first) reducer.initial(e) else reducer(v as R, e) }
+public /*inline*/ fun <T, K, R, A> Grouping<T, K>.reduce(reducer: RReducer<R, A, T>): Map<K, R> =
+        aggregate<T, K, A> { k, v, e, first -> if (first) reducer.initial(e) else reducer(v as A, e) }
             // finalize values, often a no-op
-            .apply { (this as MutableMap<K, R>).entries.forEach { it.setValue(reducer.final(it.value)) }}
+            .mapValuesInPlace { reducer.final(it.value) }
+
+internal inline fun <K, V, R> Map<K, V>.mapValuesInPlace(f: (Map.Entry<K, V>) -> R): Map<K, R> {
+    (this as MutableMap<K, V>).entries.forEach {
+        (it as MutableMap.MutableEntry<K, R>).setValue(f(it))
+    }
+    return (this as MutableMap<K, R>)
+}
 
 public inline fun <S, T : S, K> Grouping<T, K>.reduce(operation: (K, S, T) -> S): Map<K, S> =
         aggregate { key, value, e, first ->
@@ -63,11 +72,28 @@ public inline fun <S, T : S, K> Grouping<T, K>.reduce(operation: (K, S, T) -> S)
 
 public /*inline*/ fun <T, K> Grouping<T, K>.count(): Map<K, Int> = fold(0) { acc, e -> acc + 1 }
 
+public fun <T, K> Grouping<T,K>.countRef(): Map<K, Int> =
+        fold(IntRef()) { acc, e -> acc.apply { this.element += 1 }}
+        .mapValues { it.value.element }
+
+public fun <T, K> Grouping<T,K>.countRefInPlace(): Map<K, Int> =
+        fold(IntRef()) { acc, e -> acc.apply { this.element += 1 }}
+        .mapValuesInPlace { it.value.element }
+
 public /*inline*/ fun <K> Grouping<Int, K>.sum(): Map<K, Int> =
         reduce { k, sum, e -> sum + e }
 
 public inline fun <T, K> Grouping<T, K>.sumBy(valueSelector: (T) -> Int): Map<K, Int> =
         fold(0) { acc, e -> acc + valueSelector(e)}
+
+public inline fun <T, K> Grouping<T, K>.sumByRef(valueSelector: (T) -> Int): Map<K, Int> =
+        fold(IntRef()) { acc, e -> acc.apply { element += valueSelector(e)} }
+            .mapValues { it.value.element }
+
+@Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
+public inline fun <T, K> Grouping<T, K>.sumByRefInPlace(valueSelector: (T) -> Int): Map<K, Int> =
+        fold(IntRef()) { acc, e -> acc.apply { element += valueSelector(e)} }
+            .mapValuesInPlace { it.value.element }
 
 
 
