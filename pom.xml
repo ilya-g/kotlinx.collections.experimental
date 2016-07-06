@@ -55,6 +55,7 @@
 
     <modules>
         <module>kotlinx-collections-experimental</module>
+        <module>kotlinx-collections-experimental/benchmarks</module>
     </modules>
 
     <build>
