@@ -18,12 +18,22 @@ GroupCount.countGroupingRef                100  avgt   30  4,862 ± 0,123  us/op
 GroupCount.countGroupingRefInPlace         100  avgt   30  4,376 ± 0,103  us/op
 
 
+Benchmark                               (elements)  Mode  Cnt     Score    Error  Units
+PrimitiveCount.countGroup                      100  avgt   30     3,918 ±  0,061  us/op
+PrimitiveCount.countGrouping                   100  avgt   30     4,357 ±  0,073  us/op
+PrimitiveCount.countGroupingRefInPlace         100  avgt   30     5,243 ±  0,334  us/op
+PrimitiveCount.countGroup                   100000  avgt   30  1975,118 ± 28,235  us/op
+PrimitiveCount.countGrouping                100000  avgt   30  2780,914 ± 36,485  us/op
+PrimitiveCount.countGroupingRefInPlace      100000  avgt   30  2683,975 ± 22,961  us/op
 
-Benchmark                       (elements)  Mode  Cnt    Score   Error  Units
-GroupSum.sumGroup                    10000  avgt   30  293,741 ± 7,914  us/op
-GroupSum.sumGrouping                 10000  avgt   30  260,984 ± 4,679  us/op
-GroupSum.sumGroupingAtomic           10000  avgt   30  283,259 ± 4,926  us/op
-GroupSum.sumGroupingReducer          10000  avgt   30  277,612 ± 7,995  us/op
-GroupSum.sumGroupingReducerRef       10000  avgt   30  241,233 ± 5,232  us/op
-GroupSum.sumGroupingRef              10000  avgt   30  262,313 ± 6,153  us/op
-GroupSum.sumGroupingRefInPlace       10000  avgt   30  256,394 ± 5,477  us/op
+
+
+Benchmark                       (elements)  Mode  Cnt     Score     Error  Units
+GroupSum.sumGroup                   100000  avgt   30  3681,006 ±  70,161  us/op
+GroupSum.sumGrouping                100000  avgt   30  3268,084 ±  77,064  us/op
+GroupSum.sumGroupingAtomic          100000  avgt   30  2737,813 ±  60,805  us/op
+GroupSum.sumGroupingReducer         100000  avgt   30  3530,006 ± 176,741  us/op
+GroupSum.sumGroupingReducerRef      100000  avgt   30  2535,142 ±  57,904  us/op
+GroupSum.sumGroupingRef             100000  avgt   30  2493,580 ±  43,784  us/op
+GroupSum.sumGroupingRefInPlace      100000  avgt   30  2602,227 ±  54,250  us/op
+

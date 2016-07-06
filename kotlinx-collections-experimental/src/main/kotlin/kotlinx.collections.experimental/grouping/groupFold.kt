@@ -30,6 +30,16 @@ public inline fun <T, K, R> Iterable<T>.groupReduceBy(keySelector: (T) -> K, red
 public inline fun <T, K> Iterable<T>.groupCountBy(keySelector: (T) -> K): Map<K, Int> =
         groupFoldBy(keySelector, 0, { acc, e -> acc + 1 })
 
+public inline fun <K> IntArray.groupCountBy(keySelector: (Int) -> K): Map<K, Int> {
+    val result = mutableMapOf<K, Int>()
+    for (e in this) {
+        val key = keySelector(e)
+        val value = result[key]
+        result[key] = (value ?: 0) + 1
+    }
+    return result
+}
+
 
 
 public inline fun <S, T : S, K> Iterable<T>.groupReduceBy(keySelector: (T) -> K, operation: (K, S, T) -> S): Map<K, S> {

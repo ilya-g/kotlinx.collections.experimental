@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 fun main(args: Array<String>) {
     val options = OptionsBuilder()
             .mode(Mode.AverageTime)
-            .include(GroupSum::class.java.simpleName)
+            .include(PrimitiveCount::class.java.simpleName)
             .warmupIterations(6)
             .measurementIterations(15)
             .measurementTime(TimeValue.milliseconds(500))
