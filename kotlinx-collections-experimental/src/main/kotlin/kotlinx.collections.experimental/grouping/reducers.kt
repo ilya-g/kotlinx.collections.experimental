@@ -1,11 +1,13 @@
 package kotlinx.collections.experimental.grouping
 
 import java.util.*
+import kotlin.jvm.internal.NonVolatileRef.IntRef
 
 
 typealias StepFunction<R, T> = (R, T) -> R
 
 interface RReducer<R, A, in T> : StepFunction<A, T> {
+    override fun invoke(acc: A, item: T): A
     fun initial(item: T): A
     fun final(result: A): R
 }
@@ -23,7 +25,7 @@ interface Transducer<B, C> {
 public fun <A, B> map(f: (B) -> A): Transducer<A, B> = object : Transducer<A, B> {
     override fun <R, Acc> transform(r: RReducer<R, Acc, A>) = object : RReducer<R, Acc, B> {
         override fun initial(item: B): Acc = r.initial(f(item))
-        override fun invoke(p1: Acc, p2: B): Acc = r(p1, f(p2))
+        override fun invoke(acc: Acc, item: B): Acc = r(acc, f(item))
         override fun final(result: Acc): R = r.final(result)
     }
 }*/
@@ -37,41 +39,55 @@ public fun <A, B> map(f: (B) -> A): Transducer<A, B> = object : Transducer<A, B>
 
 object Sum {
     object Ints : Reducer<Int, Int> {
-        override fun invoke(p1: Int, p2: Int): Int = p1 + p2
+        override fun invoke(acc: Int, item: Int): Int = acc + item
         override fun initial(item: Int): Int = item
     }
 
     object Longs : Reducer<Long, Long> {
-        override fun invoke(p1: Long, p2: Long): Long = p1 + p2
+        override fun invoke(acc: Long, item: Long): Long = acc + item
         override fun initial(item: Long): Long = item
     }
 
     inline fun <T> by(crossinline selector: (T) -> Int) = object : Reducer<Int, T> {
-        override fun invoke(p1: Int, p2: T): Int = p1 + selector(p2)
+        override fun invoke(acc: Int, item: T): Int = acc + selector(item)
         override fun initial(item: T): Int = selector(item)
     }
 
     inline fun <T> byLong(crossinline selector: (T) -> Long) = object : Reducer<Long, T> {
-        override fun invoke(p1: Long, p2: T): Long = p1 + selector(p2)
+        override fun invoke(acc: Long, item: T): Long = acc + selector(item)
         override fun initial(item: T): Long = selector(item)
     }
-
 }
+
+object RefSum {
+    inline fun <T> by(crossinline selector: (T) -> Int) = object : RReducer<Int, IntRef, T> {
+        override fun invoke(acc: IntRef, item: T): IntRef = acc.apply { element += selector(item) }
+        override fun initial(item: T): IntRef = IntRef().apply { element = selector(item) }
+        override fun final(result: IntRef): Int = result.element
+    }
+}
+
 
 object Count : Reducer<Int, Any?> {
     override fun initial(item: Any?): Int = 1
-    override fun invoke(p1: Int, p2: Any?) = p1 + 1
+    override fun invoke(acc: Int, item: Any?) = acc + 1
+}
+
+object CountWithRef : RReducer<Int, IntRef, Any?> {
+    override fun invoke(acc: IntRef, item:  Any?): IntRef = acc.apply { this.element += 1 }
+    override fun initial(item:  Any?) = IntRef()
+    override fun final(result: IntRef) = result.element
 }
 
 object StringJoin {
     fun <T> with(delimiter: String) = object : RReducer<String, StringBuilder, T> {
         override fun initial(item: T): StringBuilder = StringBuilder(item.toString())
-        override fun invoke(p1: StringBuilder, p2: T): StringBuilder = p1.append(delimiter).append(p2.toString())
+        override fun invoke(acc: StringBuilder, item: T): StringBuilder = acc.append(delimiter).append(item.toString())
         override fun final(result: StringBuilder): String = result.toString()
     }
     fun <T> with(delimiter: String, prefix: String, suffix: String) = object : RReducer<String, StringBuilder, T> {
         override fun initial(item: T): StringBuilder = StringBuilder().append(prefix).append(item.toString())
-        override fun invoke(p1: StringBuilder, p2: T): StringBuilder = p1.append(delimiter).append(p2.toString())
+        override fun invoke(acc: StringBuilder, item: T): StringBuilder = acc.append(delimiter).append(item.toString())
         override fun final(result: StringBuilder): String = result.append(suffix).toString()
     }
 }
