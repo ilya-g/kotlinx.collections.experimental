@@ -2,41 +2,41 @@ package kotlinx.collections.experimental.grouping
 
 
 public interface Grouping<T, out K> {
-    fun source(): Iterator<T>
+    fun iterator(): Iterator<T>
     fun keySelector(element: T): K
 }
 
 // Should we provide specialized groupings: IntGrouping, LongGrouping, CharGrouping?
 
 public inline fun <T, K> Iterable<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun source(): Iterator<T> = this@grouping.iterator()
+    override fun iterator(): Iterator<T> = this@grouping.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
 public inline fun <T, K> Sequence<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun source(): Iterator<T> = this@grouping.iterator()
+    override fun iterator(): Iterator<T> = this@grouping.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
 public inline fun <T, K> Array<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun source(): Iterator<T> = this@grouping.iterator()
+    override fun iterator(): Iterator<T> = this@grouping.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
 public inline fun <K> IntArray.grouping(crossinline keySelector: (Int) -> K): Grouping<Int, K> = object : Grouping<Int, K> {
-    override fun source(): IntIterator = this@grouping.iterator()
+    override fun iterator(): IntIterator = this@grouping.iterator()
     override fun keySelector(element: Int): K = keySelector(element)
 }
 
 public inline fun <K> CharSequence.grouping(crossinline keySelector: (Char) -> K): Grouping<Char, K> = object : Grouping<Char, K> {
-    override fun source(): CharIterator = this@grouping.iterator()
+    override fun iterator(): CharIterator = this@grouping.iterator()
     override fun keySelector(element: Char): K = keySelector(element)
 }
 
 
 public inline fun <T, K, R> Grouping<T, K>.aggregate(operation: (key: K, value: R?, element: T, first: Boolean) -> R): Map<K, R> {
     val result = mutableMapOf<K, R>()
-    for (e in this.source()) {
+    for (e in this.iterator()) {
         val key = keySelector(e)
         val value = result[key]
         result[key] = operation(key, value, e, value == null && !result.containsKey(key))
@@ -90,6 +90,6 @@ fun main(args: Array<String>) {
 
     val joined = values.joinToString("")
     val charFrequencies = joined.grouping { it }.count()
-    println(charFrequencies)
+    println(charFrequencies.entries.sortedBy { it.key })
 }
 
