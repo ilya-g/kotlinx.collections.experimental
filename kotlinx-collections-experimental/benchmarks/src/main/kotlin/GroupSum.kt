@@ -19,7 +19,8 @@ open class GroupSum {
         data = generateElements(elements, buckets)
     }
 
-
+    @Benchmark
+    fun naive() = data.groupBy { it.key }.mapValues { it.value.sumBy { it.value } }
 
     @Benchmark
     fun sumGroup() = data.groupBySumBy(keySelector = {it.key}, valueSelector = {it.value})

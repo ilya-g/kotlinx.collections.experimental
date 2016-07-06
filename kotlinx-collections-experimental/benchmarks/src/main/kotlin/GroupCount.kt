@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 @BenchmarkMode(Mode.AverageTime)
 open class GroupCount {
 
-    @Param("100000")
+    @Param("100", "100000")
     open var elements = 0
     val buckets = 100
 
@@ -19,6 +19,9 @@ open class GroupCount {
         data = generateElements(elements, buckets)
     }
 
+
+    @Benchmark
+    fun naive() = data.groupBy { it.key }.mapValues { it.value.size }
 
     @Benchmark
     fun countGroup() = data.groupCountBy { it.key }

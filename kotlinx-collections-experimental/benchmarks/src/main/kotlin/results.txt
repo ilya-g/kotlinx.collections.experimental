@@ -6,6 +6,7 @@ GroupCount.countGroupingReducer         100000  avgt   30  3097,474 ±  75,406  
 GroupCount.countGroupingReducerRef      100000  avgt   30  2475,965 ±  36,754  us/op
 GroupCount.countGroupingRef             100000  avgt   30  2483,159 ±  44,417  us/op
 GroupCount.countGroupingRefInPlace      100000  avgt   30  2481,601 ±  42,101  us/op
+GroupCount.naive                        100000  avgt   30  6746,438 ± 364,850  us/op
 
 
 Benchmark                           (elements)  Mode  Cnt  Score   Error  Units
@@ -16,6 +17,7 @@ GroupCount.countGroupingReducer            100  avgt   30  5,373 ± 0,139  us/op
 GroupCount.countGroupingReducerRef         100  avgt   30  4,623 ± 0,166  us/op
 GroupCount.countGroupingRef                100  avgt   30  4,862 ± 0,123  us/op
 GroupCount.countGroupingRefInPlace         100  avgt   30  4,376 ± 0,103  us/op
+GroupCount.naive                           100  avgt   30  4,179 ± 0,088  us/op
 
 
 Benchmark                               (elements)  Mode  Cnt     Score    Error  Units
@@ -36,4 +38,5 @@ GroupSum.sumGroupingReducer         100000  avgt   30  3530,006 ± 176,741  us/o
 GroupSum.sumGroupingReducerRef      100000  avgt   30  2535,142 ±  57,904  us/op
 GroupSum.sumGroupingRef             100000  avgt   30  2493,580 ±  43,784  us/op
 GroupSum.sumGroupingRefInPlace      100000  avgt   30  2602,227 ±  54,250  us/op
+GroupSum.naive                      100000  avgt   30  6450,663 ± 337,416  us/op
 
