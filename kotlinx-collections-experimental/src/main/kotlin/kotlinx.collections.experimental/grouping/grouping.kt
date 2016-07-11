@@ -10,28 +10,28 @@ public interface Grouping<T, out K> {
 
 // Should we provide specialized groupings: IntGrouping, LongGrouping, CharGrouping?
 
-public inline fun <T, K> Iterable<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun iterator(): Iterator<T> = this@grouping.iterator()
+public inline fun <T, K> Iterable<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
+    override fun iterator(): Iterator<T> = this@groupingBy.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
-public inline fun <T, K> Sequence<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun iterator(): Iterator<T> = this@grouping.iterator()
+public inline fun <T, K> Sequence<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
+    override fun iterator(): Iterator<T> = this@groupingBy.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
-public inline fun <T, K> Array<T>.grouping(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun iterator(): Iterator<T> = this@grouping.iterator()
+public inline fun <T, K> Array<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
+    override fun iterator(): Iterator<T> = this@groupingBy.iterator()
     override fun keySelector(element: T): K = keySelector(element)
 }
 
-public inline fun <K> IntArray.grouping(crossinline keySelector: (Int) -> K): Grouping<Int, K> = object : Grouping<Int, K> {
-    override fun iterator(): IntIterator = this@grouping.iterator()
+public inline fun <K> IntArray.groupingBy(crossinline keySelector: (Int) -> K): Grouping<Int, K> = object : Grouping<Int, K> {
+    override fun iterator(): IntIterator = this@groupingBy.iterator()
     override fun keySelector(element: Int): K = keySelector(element)
 }
 
-public inline fun <K> CharSequence.grouping(crossinline keySelector: (Char) -> K): Grouping<Char, K> = object : Grouping<Char, K> {
-    override fun iterator(): CharIterator = this@grouping.iterator()
+public inline fun <K> CharSequence.groupingBy(crossinline keySelector: (Char) -> K): Grouping<Char, K> = object : Grouping<Char, K> {
+    override fun iterator(): CharIterator = this@groupingBy.iterator()
     override fun keySelector(element: Char): K = keySelector(element)
 }
 
@@ -100,7 +100,7 @@ public inline fun <T, K> Grouping<T, K>.sumByRefInPlace(valueSelector: (T) -> In
 
 fun main(args: Array<String>) {
     val values = listOf("apple", "fooz", "bisquit", "abc", "far", "bar", "foo")
-    val grouping = values.grouping { it[0] }
+    val grouping = values.groupingBy { it[0] }
 
     val countByChar = grouping.fold(0) { acc, e -> acc + 1 }
 
@@ -108,14 +108,14 @@ fun main(args: Array<String>) {
     val sumLengthByChar2 = grouping.sumBy { it.length }
     println(sumLengthByChar2)
 
-    val countByChar2 = values.grouping { it.first() }.count()
+    val countByChar2 = values.groupingBy { it.first() }.count()
     println(countByChar2)
 
     println(grouping.reduce(Count))
     println(grouping.reduce(Sum.by { it.length }))
 
     val joined = values.joinToString("")
-    val charFrequencies = joined.grouping { it }.count()
+    val charFrequencies = joined.groupingBy { it }.count()
     println(charFrequencies.entries.sortedBy { it.key })
 }
 

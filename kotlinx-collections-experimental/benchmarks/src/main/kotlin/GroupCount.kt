@@ -27,25 +27,25 @@ open class GroupCount {
     fun countGroup() = data.groupCountBy { it.key }
 
     @Benchmark
-    fun countGrouping() = data.grouping { it.key }.count()
+    fun countGrouping() = data.groupingBy { it.key }.count()
 
     @Benchmark
     fun countGroupingAtomic() =
-            data.grouping { it.key }
+            data.groupingBy { it.key }
                     .fold(AtomicInteger(0)) { acc, e -> acc.apply { incrementAndGet() }}
                     .mapValues { it.value.get() }
 
     @Benchmark
-    fun countGroupingRef() = data.grouping { it.key }.countRef()
+    fun countGroupingRef() = data.groupingBy { it.key }.countRef()
 
     @Benchmark
-    fun countGroupingRefInPlace() = data.grouping { it.key }.countRefInPlace()
+    fun countGroupingRefInPlace() = data.groupingBy { it.key }.countRefInPlace()
 
     @Benchmark
-    fun countGroupingReducer() = data.grouping { it.key }.reduce(Count)
+    fun countGroupingReducer() = data.groupingBy { it.key }.reduce(Count)
 
     @Benchmark
-    fun countGroupingReducerRef() = data.grouping { it.key }.reduce(CountWithRef)
+    fun countGroupingReducerRef() = data.groupingBy { it.key }.reduce(CountWithRef)
 
 
 }

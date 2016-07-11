@@ -26,24 +26,24 @@ open class GroupSum {
     fun sumGroup() = data.groupBySumBy(keySelector = {it.key}, valueSelector = {it.value})
 
     @Benchmark
-    fun sumGrouping() = data.grouping { it.key }.sumBy { it.value }
+    fun sumGrouping() = data.groupingBy { it.key }.sumBy { it.value }
 
     @Benchmark
-    fun sumGroupingAtomic() = data.grouping { it.key }
+    fun sumGroupingAtomic() = data.groupingBy { it.key }
             .fold(AtomicInteger()) { acc, e -> acc.apply { addAndGet(e.value) }}
             .mapValues { it.value.get() }
 
     @Benchmark
-    fun sumGroupingRef() = data.grouping { it.key }.sumByRef { it.value }
+    fun sumGroupingRef() = data.groupingBy { it.key }.sumByRef { it.value }
 
     @Benchmark
-    fun sumGroupingRefInPlace() = data.grouping { it.key }.sumByRefInPlace { it.value }
+    fun sumGroupingRefInPlace() = data.groupingBy { it.key }.sumByRefInPlace { it.value }
 
     @Benchmark
-    fun sumGroupingReducer() = data.grouping { it.key }.reduce(Sum.by { it.value })
+    fun sumGroupingReducer() = data.groupingBy { it.key }.reduce(Sum.by { it.value })
 
     @Benchmark
-    fun sumGroupingReducerRef() = data.grouping { it.key }.reduce(RefSum.by { it.value })
+    fun sumGroupingReducerRef() = data.groupingBy { it.key }.reduce(RefSum.by { it.value })
 
 }
 
