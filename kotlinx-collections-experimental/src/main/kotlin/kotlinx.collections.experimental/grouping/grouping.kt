@@ -1,5 +1,7 @@
 package kotlinx.collections.experimental.grouping
 
+import java.util.stream.Collector
+import java.util.stream.Collectors
 import kotlin.jvm.internal.NonVolatileRef.IntRef
 
 
@@ -99,6 +101,10 @@ internal inline fun <K, V, R> Map<K, V>.mapValuesInPlace(f: (Map.Entry<K, V>) ->
 }
 
 
+public fun <T, K, R, A> Grouping<T, K>.collectEach(collector: Collector<in T, A, out R>) =
+    fold({ k, e -> collector.supplier().get() }, { k, acc, e -> acc.apply { collector.accumulator().accept(acc, e) }} )
+        .mapValuesInPlace { collector.finisher().apply(it.value) }
+
 
 
 fun main(args: Array<String>) {
@@ -116,6 +122,11 @@ fun main(args: Array<String>) {
 
     println(grouping.reduce(Count))
     println(grouping.reduce(Sum.by { it.length }))
+
+    println(grouping.collectEach(Collectors.counting()))
+    println(grouping.collectEach(Collectors.groupingBy({ s: String -> s.length }, Collectors.counting())))
+    println(grouping.collectEach(Collectors.summarizingInt { it.length }))
+
 
     val joined = values.joinToString("")
     val charFrequencies = joined.groupingBy { it }.countEach()

@@ -2,6 +2,7 @@ Benchmark                           (elements)  Mode  Cnt     Score     Error  U
 GroupCount.countGroup                   100000  avgt   30  3537,009 ± 141,201  us/op
 GroupCount.countGrouping                100000  avgt   30  3185,325 ±  79,968  us/op
 GroupCount.countGroupingAtomic          100000  avgt   30  2736,021 ±  63,216  us/op
+GroupCount.countGroupingCollector       100000  avgt   30  3655,338 ± 206,407  us/op
 GroupCount.countGroupingReducer         100000  avgt   30  3097,474 ±  75,406  us/op
 GroupCount.countGroupingReducerRef      100000  avgt   30  2475,965 ±  36,754  us/op
 GroupCount.countGroupingRef             100000  avgt   30  2483,159 ±  44,417  us/op
@@ -13,6 +14,7 @@ Benchmark                           (elements)  Mode  Cnt  Score   Error  Units
 GroupCount.countGroup                      100  avgt   30  3,703 ± 0,213  us/op
 GroupCount.countGrouping                   100  avgt   30  3,546 ± 0,067  us/op
 GroupCount.countGroupingAtomic             100  avgt   30  5,126 ± 0,350  us/op
+GroupCount.countGroupingCollector          100  avgt   30  4,201 ± 0,234  us/op
 GroupCount.countGroupingReducer            100  avgt   30  5,373 ± 0,139  us/op
 GroupCount.countGroupingReducerRef         100  avgt   30  4,623 ± 0,166  us/op
 GroupCount.countGroupingRef                100  avgt   30  4,862 ± 0,123  us/op

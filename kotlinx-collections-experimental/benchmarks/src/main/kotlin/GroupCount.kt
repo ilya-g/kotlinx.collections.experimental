@@ -3,6 +3,7 @@ package kotlinx.collections.experimental.benchmarks
 import kotlinx.collections.experimental.grouping.*
 import org.openjdk.jmh.annotations.*
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.stream.Collectors
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
@@ -46,6 +47,9 @@ open class GroupCount {
 
     @Benchmark
     fun countGroupingReducerRef() = data.groupingBy { it.key }.reduce(CountWithRef)
+
+    @Benchmark
+    fun countGroupingCollector() = data.groupingBy { it.key }.collectEach(Collectors.counting())
 
 
 }
