@@ -28,10 +28,10 @@ open class PrimitiveCount {
     fun countGroup() = data.groupCountBy { key(it) }
 
     @Benchmark
-    fun countGrouping() = data.groupingBy { key(it) }.count()
+    fun countGrouping() = data.groupingBy { key(it) }.countEach()
 
     @Benchmark
-    fun countGroupingRefInPlace() = data.groupingBy { key(it) }.countRefInPlace()
+    fun countGroupingRefInPlace() = data.groupingBy { key(it) }.countEachRefInPlace()
 
 
 
