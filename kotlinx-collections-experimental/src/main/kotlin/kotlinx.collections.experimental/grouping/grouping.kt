@@ -69,11 +69,15 @@ public inline fun <S, T : S, K> Grouping<T, K>.reduce(operation: (K, S, T) -> S)
 public /*inline*/ fun <T, K> Grouping<T, K>.countEach(): Map<K, Int> = fold(0) { acc, e -> acc + 1 }
 
 public fun <T, K> Grouping<T,K>.countEachRef(): Map<K, Int> =
-        fold(IntRef()) { acc, e -> acc.apply { this.element += 1 }}
+        fold(
+                initialValueSelector = { k, e -> IntRef() },
+                operation = { k, acc, e -> acc.apply { element += 1 } })
         .mapValues { it.value.element }
 
 public fun <T, K> Grouping<T,K>.countEachRefInPlace(): Map<K, Int> =
-        fold(IntRef()) { acc, e -> acc.apply { this.element += 1 }}
+        fold(
+                initialValueSelector = { k, e -> IntRef() },
+                operation = { k, acc, e -> acc.apply { element += 1 } })
         .mapValuesInPlace { it.value.element }
 
 public /*inline*/ fun <K> Grouping<Int, K>.sumEach(): Map<K, Int> =
@@ -83,13 +87,17 @@ public inline fun <T, K> Grouping<T, K>.sumEachBy(valueSelector: (T) -> Int): Ma
         fold(0) { acc, e -> acc + valueSelector(e)}
 
 public inline fun <T, K> Grouping<T, K>.sumEachByRef(valueSelector: (T) -> Int): Map<K, Int> =
-        fold(IntRef()) { acc, e -> acc.apply { element += valueSelector(e)} }
-            .mapValues { it.value.element }
+        fold(
+                initialValueSelector = { k, e -> IntRef() },
+                operation = { k, acc, e -> acc.apply { element += valueSelector(e) } })
+        .mapValues { it.value.element }
 
 @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
 public inline fun <T, K> Grouping<T, K>.sumEachByRefInPlace(valueSelector: (T) -> Int): Map<K, Int> =
-        fold(IntRef()) { acc, e -> acc.apply { element += valueSelector(e)} }
-            .mapValuesInPlace { it.value.element }
+        fold(
+                initialValueSelector = { k, e -> IntRef() },
+                operation = { k, acc, e -> acc.apply { element += valueSelector(e) } })
+        .mapValuesInPlace { it.value.element }
 
 
 
