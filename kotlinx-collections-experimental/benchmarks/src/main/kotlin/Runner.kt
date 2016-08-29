@@ -11,10 +11,12 @@ fun main(args: Array<String>) {
     val options = OptionsBuilder()
             .mode(Mode.AverageTime)
             .timeUnit(TimeUnit.MICROSECONDS)
-            .include(SequenceCoroutineOperations::class.java.simpleName + ".map")
+            .include(SequenceCoroutineOperations::class.java.simpleName)
             .warmupIterations(6)
             .measurementIterations(20)
             .measurementTime(TimeValue.milliseconds(500))
+//            .jvmArgsAppend("-XX:TieredStopAtLevel=1")
+//            .jvmArgsAppend("-Xint")
 //            .addProfiler("perfasm")
             .forks(2)
 

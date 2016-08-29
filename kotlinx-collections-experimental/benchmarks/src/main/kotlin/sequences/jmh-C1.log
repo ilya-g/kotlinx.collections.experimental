@@ -1,0 +1,824 @@
+# JMH 1.13 (released 33 days ago)
+# VM version: JDK 1.8.0_101, VM 25.101-b13
+# VM invoker: /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/jre/bin/java
+# VM options: -XX:TieredStopAtLevel=1
+# Warmup: 6 iterations, 1 s each
+# Measurement: 20 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations.map
+
+# Run progress: 0,00% complete, ETA 00:00:48
+# Fork: 1 of 1
+# Preparing profilers: LinuxPerfAsmProfiler 
+# Profilers consume stdout and stderr from target VM, use -v EXTRA to copy to console
+# Warmup Iteration   1: 2110,521 us/op
+# Warmup Iteration   2: 1981,843 us/op
+# Warmup Iteration   3: 1951,386 us/op
+# Warmup Iteration   4: 1959,731 us/op
+# Warmup Iteration   5: 1970,925 us/op
+# Warmup Iteration   6: 1984,869 us/op
+Iteration   1: 1977,159 us/op
+Iteration   2: 1962,975 us/op
+Iteration   3: 1961,580 us/op
+Iteration   4: 1958,331 us/op
+Iteration   5: 1956,904 us/op
+Iteration   6: 1954,077 us/op
+Iteration   7: 1934,967 us/op
+Iteration   8: 1981,114 us/op
+Iteration   9: 1945,769 us/op
+Iteration  10: 1941,314 us/op
+Iteration  11: 1937,200 us/op
+Iteration  12: 1960,354 us/op
+Iteration  13: 1954,974 us/op
+Iteration  14: 1969,565 us/op
+Iteration  15: 1946,462 us/op
+Iteration  16: 1956,789 us/op
+Iteration  17: 1950,494 us/op
+Iteration  18: 1965,486 us/op
+Iteration  19: 1960,160 us/op
+Iteration  20: 1976,046 us/op
+# Processing profiler results: LinuxPerfAsmProfiler 
+
+
+Result "map":
+  1957,586 ±(99.9%) 11,036 us/op [Average]
+  (min, avg, max) = (1934,967, 1957,586, 1981,114), stdev = 12,709
+  CI (99.9%): [1946,550, 1968,622] (assumes normal distribution)
+
+Secondary result "·asm":
+PrintAssembly processed: 114963 total address lines.
+Perf output processed (skipped 6,136 seconds):
+ Column 1: cycles (12073 events)
+ Column 2: instructions (12072 events)
+
+Hottest code regions (>10,00% "cycles" events):
+
+....[Hottest Region 1]..............................................................................
+C1, level 1, kotlin.sequences.TransformingSequence$iterator$1::next, version 468 (127 bytes) 
+
+                   OopMap{off=116}
+                   #2 
+                   OopMap{rsi=Oop off=133}
+                   </print_nmethod>
+                   Decoding compiled method 0x00007f16a11bb590:
+                   Code:
+                   [Entry Point]
+                   [Constants]
+                     # {method} {0x00007f16b4749bc8} &apos;next&apos; &apos;()Ljava/lang/Object;&apos; in &apos;kotlin/sequences/TransformingSequence$iterator$1&apos;
+                     #           [sp+0x50]  (sp of caller)
+  1,29%    1,08%     0x00007f16a11bb700: mov    0x8(%rsi),%r10d
+  0,01%              0x00007f16a11bb704: shl    $0x3,%r10
+  0,01%              0x00007f16a11bb708: cmp    %rax,%r10
+                     0x00007f16a11bb70b: jne    0x00007f16a1045b60  ;   {runtime_call}
+  1,20%    1,09%     0x00007f16a11bb711: nopw   0x0(%rax,%rax,1)
+  0,01%              0x00007f16a11bb71c: xchg   %ax,%ax
+                   [Verified Entry Point]
+                     0x00007f16a11bb720: mov    %eax,-0x14000(%rsp)
+  1,37%    1,62%     0x00007f16a11bb727: push   %rbp
+  0,01%    0,01%     0x00007f16a11bb728: sub    $0x40,%rsp         ;*aload_0
+                                                                   ; - kotlin.sequences.TransformingSequence$iterator$1::next@0 (line 137)
+                     0x00007f16a11bb72c: mov    0x10(%rsi),%edi
+  1,30%    1,86%     0x00007f16a11bb72f: shl    $0x3,%rdi          ;*getfield this$0
+                                                                   ; - kotlin.sequences.TransformingSequence$iterator$1::next@1 (line 137)
+  0,01%           ╭  0x00007f16a11bb733: mov    0x10(%rdi),%edi    ; implicit exception: dispatches to 0x00007f16a11bb780
+  0,01%    0,02%  │  0x00007f16a11bb736: shl    $0x3,%rdi          ;*getfield transformer
+                  │                                                ; - kotlin.sequences.TransformingSequence::access$getTransformer$p@1 (line 132)
+                  │                                                ; - kotlin.sequences.TransformingSequence$iterator$1::next@4 (line 137)
+  0,01%           │  0x00007f16a11bb73a: mov    0xc(%rsi),%esi
+  1,19%    1,40%  │  0x00007f16a11bb73d: shl    $0x3,%rsi          ;*getfield iterator
+                  │                                                ; - kotlin.sequences.TransformingSequence$iterator$1::next@8 (line 137)
+                  │  0x00007f16a11bb741: mov    %rdi,0x28(%rsp)
+  0,01%           │  0x00007f16a11bb746: nop    
+                  │  0x00007f16a11bb747: nop    
+  1,12%    1,31%  │  0x00007f16a11bb748: nop    
+                  │  0x00007f16a11bb749: nop    
+  0,01%    0,01%  │  0x00007f16a11bb74a: nop    
+                  │  0x00007f16a11bb74b: nop    
+  1,23%    1,13%  │  0x00007f16a11bb74c: nop    
+                  │  0x00007f16a11bb74d: mov    $0xffffffffffffffff,%rax
+  0,02%    0,02%  │  0x00007f16a11bb757: callq  0x00007f16a1045f60  ; OopMap{[40]=Oop off=92}
+                  │                                                ;*invokeinterface next
+                  │                                                ; - kotlin.sequences.TransformingSequence$iterator$1::next@11 (line 137)
+                  │                                                ;   {virtual_call}
+  1,27%    1,27%  │  0x00007f16a11bb75c: mov    %rax,%rdx
+  0,03%           │  0x00007f16a11bb75f: mov    0x28(%rsp),%rsi    ;*invokeinterface invoke
+                  │                                                ; - kotlin.sequences.TransformingSequence$iterator$1::next@16 (line 137)
+  0,02%    0,04%  │  0x00007f16a11bb764: nop    
+  1,04%    1,78%  │  0x00007f16a11bb765: mov    $0xffffffffffffffff,%rax
+  0,01%           │  0x00007f16a11bb76f: callq  0x00007f16a1045f60  ; OopMap{off=116}
+                  │                                                ;*invokeinterface invoke
+                  │                                                ; - kotlin.sequences.TransformingSequence$iterator$1::next@16 (line 137)
+                  │                                                ;   {virtual_call}
+  0,46%    0,05%  │  0x00007f16a11bb774: add    $0x40,%rsp
+  0,02%           │  0x00007f16a11bb778: pop    %rbp
+  0,87%    0,22%  │  0x00007f16a11bb779: test   %eax,0x18e1a981(%rip)        # 0x00007f16b9fd6100
+                  │                                                ;   {poll_return}
+  0,38%    0,05%  │  0x00007f16a11bb77f: retq   
+                  ↘  0x00007f16a11bb780: callq  0x00007f16a10f96c0  ; OopMap{rsi=Oop off=133}
+                                                                   ;*getfield transformer
+                                                                   ; - kotlin.sequences.TransformingSequence::access$getTransformer$p@1 (line 132)
+                                                                   ; - kotlin.sequences.TransformingSequence$iterator$1::next@4 (line 137)
+                                                                   ;   {runtime_call}
+                     0x00007f16a11bb785: nop    
+                     0x00007f16a11bb786: nop    
+                     0x00007f16a11bb787: mov    0x290(%r15),%rax
+                     0x00007f16a11bb78e: mov    $0x0,%r10
+....................................................................................................
+ 12,90%   12,95%  <total for region 1>
+
+....[Hottest Regions]...............................................................................
+ 12,90%   12,95%         C1, level 1  kotlin.sequences.TransformingSequence$iterator$1::next, version 468 (127 bytes) 
+  9,67%   10,64%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 179 (63 bytes) 
+  8,70%    9,68%         C1, level 1  java.lang.Integer::valueOf, version 454 (128 bytes) 
+  7,57%    7,16%         C1, level 1  kotlin.sequences.TransformingSequence$iterator$1::hasNext, version 467 (78 bytes) 
+  6,36%    5,17%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 478 (79 bytes) 
+  6,34%    7,04%         C1, level 1  kotlin.collections.IntIterator::next, version 469 (79 bytes) 
+  6,15%    6,90%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 471 (93 bytes) 
+  5,72%    6,12%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$3::invoke, version 479 (187 bytes) 
+  5,15%    4,87%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$1::invoke, version 472 (118 bytes) 
+  4,88%    3,95%         C1, level 1  java.lang.Integer::intValue, version 464 (54 bytes) 
+  4,74%    5,72%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 465 (62 bytes) 
+  4,61%    5,43%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 474 (47 bytes) 
+  4,14%    4,50%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$2::invoke, version 476 (79 bytes) 
+  4,00%    3,99%           [unknown]  [unknown] (2 bytes) 
+  1,76%    0,30%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$1::invoke, version 472 (50 bytes) 
+  1,70%    0,50%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$2::invoke, version 476 (6 bytes) 
+  1,37%    1,66%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 474 (11 bytes) 
+  1,10%    0,80%           libjvm.so  SpinPause (9 bytes) 
+  1,06%    0,07%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$2::invoke, version 476 (50 bytes) 
+  0,45%    0,89%           libjvm.so  ParallelTaskTerminator::offer_termination (9 bytes) 
+  1,63%    1,67%  <...other 254 warm regions...>
+....................................................................................................
+ 99,99%   99,98%  <totals>
+
+....[Hottest Methods (after inlining)]..............................................................
+ 12,90%   12,95%         C1, level 1  kotlin.sequences.TransformingSequence$iterator$1::next, version 468 
+  9,67%   10,64%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 179 
+  8,70%    9,68%         C1, level 1  java.lang.Integer::valueOf, version 454 
+  7,57%    7,16%         C1, level 1  kotlin.sequences.TransformingSequence$iterator$1::hasNext, version 467 
+  6,91%    5,17%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$1::invoke, version 472 
+  6,90%    5,07%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$2::invoke, version 476 
+  6,36%    5,17%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 478 
+  6,34%    7,04%         C1, level 1  kotlin.collections.IntIterator::next, version 469 
+  6,15%    6,90%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 471 
+  5,98%    7,09%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 474 
+  5,72%    6,12%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map$sequence$3::invoke, version 479 
+  4,88%    3,95%         C1, level 1  java.lang.Integer::intValue, version 464 
+  4,83%    4,80%           [unknown]  [unknown] 
+  4,74%    5,72%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 465 
+  1,10%    0,80%           libjvm.so  SpinPause 
+  0,45%    0,89%           libjvm.so  ParallelTaskTerminator::offer_termination 
+  0,07%    0,08%           libjvm.so  outputStream::update_position 
+  0,06%    0,07%           libjvm.so  StringTable::buckets_unlink_or_oops_do 
+  0,05%    0,01%           libjvm.so  PSScavengeKlassClosure::do_klass 
+  0,04%    0,02%      hsdis-amd64.so  print_insn 
+  0,58%    0,28%  <...other 63 warm methods...>
+....................................................................................................
+ 99,99%   99,59%  <totals>
+
+....[Distribution by Source]........................................................................
+ 92,82%   92,64%         C1, level 1
+  4,83%    4,80%           [unknown]
+  2,10%    2,27%           libjvm.so
+  0,10%    0,22%        libc-2.19.so
+  0,07%    0,01%         interpreter
+  0,05%    0,02%      hsdis-amd64.so
+  0,02%    0,01%  libpthread-2.19.so
+....................................................................................................
+ 99,99%   99,98%  <totals>
+
+
+
+# JMH 1.13 (released 33 days ago)
+# VM version: JDK 1.8.0_101, VM 25.101-b13
+# VM invoker: /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/jre/bin/java
+# VM options: -XX:TieredStopAtLevel=1
+# Warmup: 6 iterations, 1 s each
+# Measurement: 20 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations.map_c
+
+# Run progress: 33,33% complete, ETA 00:00:36
+# Fork: 1 of 1
+# Preparing profilers: LinuxPerfAsmProfiler 
+# Profilers consume stdout and stderr from target VM, use -v EXTRA to copy to console
+# Warmup Iteration   1: 5260,540 us/op
+# Warmup Iteration   2: 4939,675 us/op
+# Warmup Iteration   3: 4897,875 us/op
+# Warmup Iteration   4: 4892,135 us/op
+# Warmup Iteration   5: 4866,718 us/op
+# Warmup Iteration   6: 4860,706 us/op
+Iteration   1: 4997,845 us/op
+Iteration   2: 4876,536 us/op
+Iteration   3: 4955,805 us/op
+Iteration   4: 4855,453 us/op
+Iteration   5: 5006,124 us/op
+Iteration   6: 4854,926 us/op
+Iteration   7: 4890,211 us/op
+Iteration   8: 4906,893 us/op
+Iteration   9: 4866,599 us/op
+Iteration  10: 4869,911 us/op
+Iteration  11: 4898,940 us/op
+Iteration  12: 4877,877 us/op
+Iteration  13: 4897,950 us/op
+Iteration  14: 4905,301 us/op
+Iteration  15: 4910,778 us/op
+Iteration  16: 4947,099 us/op
+Iteration  17: 4966,832 us/op
+Iteration  18: 4913,111 us/op
+Iteration  19: 4918,235 us/op
+Iteration  20: 4890,780 us/op
+# Processing profiler results: LinuxPerfAsmProfiler 
+
+
+Result "map_c":
+  4910,360 ±(99.9%) 38,033 us/op [Average]
+  (min, avg, max) = (4854,926, 4910,360, 5006,124), stdev = 43,798
+  CI (99.9%): [4872,328, 4948,393] (assumes normal distribution)
+
+Secondary result "·asm":
+PrintAssembly processed: 117478 total address lines.
+Perf output processed (skipped 6,136 seconds):
+ Column 1: cycles (12172 events)
+ Column 2: instructions (12119 events)
+
+Hottest code regions (>10,00% "cycles" events):
+
+....[Hottest Region 1]..............................................................................
+C1, level 1, kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 (273 bytes) 
+
+                     0x00007f62411b9e8b: nop    
+                     0x00007f62411b9e8c: nop    
+                     0x00007f62411b9e8d: mov    $0xffffffffffffffff,%rax
+                     0x00007f62411b9e97: callq  0x00007f6241045f60  ; OopMap{[96]=Oop [88]=Oop off=316}
+                                                                   ;*invokeinterface iterator
+                                                                   ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@36 (line 5)
+                                                                   ;   {virtual_call}
+                     0x00007f62411b9e9c: mov    %rax,%rbx
+                     0x00007f62411b9e9f: mov    0x58(%rsp),%rdi    ;*aload
+                                                                   ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@43 (line 5)
+  0,44%    1,08%     0x00007f62411b9ea4: mov    %rdi,0x70(%rsp)
+  0,01%    0,01%     0x00007f62411b9ea9: mov    %rbx,%rsi          ;*invokeinterface hasNext
+                                                                   ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@45 (line 5)
+           0,02%     0x00007f62411b9eac: mov    %rbx,0x68(%rsp)
+           0,01%     0x00007f62411b9eb1: nop    
+  0,53%    0,78%     0x00007f62411b9eb2: nop    
+                     0x00007f62411b9eb3: nop    
+           0,01%     0x00007f62411b9eb4: nop    
+  0,01%              0x00007f62411b9eb5: mov    $0xffffffffffffffff,%rax
+  0,55%    0,66%     0x00007f62411b9ebf: callq  0x00007f6241045f60  ; OopMap{[96]=Oop [112]=Oop [104]=Oop off=356}
+                                                                   ;*invokeinterface hasNext
+                                                                   ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@45 (line 5)
+                                                                   ;   {virtual_call}
+  0,03%    0,05%     0x00007f62411b9ec4: cmp    $0x0,%eax
+                  ╭  0x00007f62411b9ec7: je     0x00007f62411b9fc0  ;*ifeq
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@50 (line 5)
+                  │  0x00007f62411b9ecd: mov    0x68(%rsp),%rbx
+  0,41%    0,88%  │  0x00007f62411b9ed2: mov    %rbx,%rsi          ;*invokeinterface next
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@55 (line 5)
+  0,02%           │  0x00007f62411b9ed5: mov    %rbx,0x68(%rsp)
+  0,02%           │  0x00007f62411b9eda: nop    
+  0,44%    0,50%  │  0x00007f62411b9edb: nop    
+                  │  0x00007f62411b9edc: nop    
+  0,01%           │  0x00007f62411b9edd: mov    $0xffffffffffffffff,%rax
+           0,01%  │  0x00007f62411b9ee7: callq  0x00007f6241045f60  ; OopMap{[96]=Oop [112]=Oop [104]=Oop off=396}
+                  │                                                ;*invokeinterface next
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@55 (line 5)
+                  │                                                ;   {virtual_call}
+                  │  0x00007f62411b9eec: mov    0x60(%rsp),%rsi
+                  │  0x00007f62411b9ef1: mov    0x14(%rsi),%edi
+  0,38%    0,60%  │  0x00007f62411b9ef4: shl    $0x3,%rdi
+                  │  0x00007f62411b9ef8: mov    %rdi,0x80(%rsp)    ;*getfield controller
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@64 (line 5)
+                  │  0x00007f62411b9f00: mov    0x28(%rsi),%ebx
+                  │  0x00007f62411b9f03: shl    $0x3,%rbx          ;*getfield $transform
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@68 (line 5)
+  0,50%    0,94%  │  0x00007f62411b9f07: mov    %rax,%rdx
+                  │  0x00007f62411b9f0a: mov    %rbx,%rsi          ;*invokeinterface invoke
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@72 (line 5)
+  0,01%    0,01%  │  0x00007f62411b9f0d: mov    %rax,0x78(%rsp)
+                  │  0x00007f62411b9f12: nop    
+  0,44%    0,74%  │  0x00007f62411b9f13: nop    
+  0,01%           │  0x00007f62411b9f14: nop    
+                  │  0x00007f62411b9f15: mov    $0xffffffffffffffff,%rax
+                  │  0x00007f62411b9f1f: callq  0x00007f6241045f60  ; OopMap{[112]=Oop [104]=Oop [96]=Oop [128]=Oop [120]=Oop off=452}
+                  │                                                ;*invokeinterface invoke
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@72 (line 5)
+                  │                                                ;   {virtual_call}
+  0,15%    0,35%  │  0x00007f62411b9f24: mov    0x60(%rsp),%rdi
+                  │  0x00007f62411b9f29: mov    0x78(%rsp),%rsi
+  0,35%    0,49%  │  0x00007f62411b9f2e: mov    %rsi,%r10
+  0,12%    0,37%  │  0x00007f62411b9f31: shr    $0x3,%r10
+                  │  0x00007f62411b9f35: mov    %r10d,0x18(%rdi)
+  0,02%    0,01%  │  0x00007f62411b9f39: mov    %rdi,%rsi
+  0,35%    0,13%  │  0x00007f62411b9f3c: shr    $0x9,%rsi
+  0,12%    0,24%  │  0x00007f62411b9f40: mov    $0x7f6251e92000,%rbx
+           0,01%  │  0x00007f62411b9f4a: movb   $0x0,(%rsi,%rbx,1)
+                  │  0x00007f62411b9f4e: lock addl $0x0,(%rsp)
+ 11,01%   14,86%  │  0x00007f62411b9f53: mov    0x68(%rsp),%rsi
+                  │  0x00007f62411b9f58: mov    %rsi,%r10
+                  │  0x00007f62411b9f5b: shr    $0x3,%r10
+  0,44%    0,01%  │  0x00007f62411b9f5f: mov    %r10d,0x1c(%rdi)
+  0,01%           │  0x00007f62411b9f63: mov    %rdi,%rsi
+                  │  0x00007f62411b9f66: shr    $0x9,%rsi
+                  │  0x00007f62411b9f6a: movb   $0x0,(%rsi,%rbx,1)
+  0,48%           │  0x00007f62411b9f6e: lock addl $0x0,(%rsp)
+ 11,34%    1,71%  │  0x00007f62411b9f73: mov    0x70(%rsp),%rdx
+  0,01%           │  0x00007f62411b9f78: mov    %rdx,%r10
+                  │  0x00007f62411b9f7b: shr    $0x3,%r10
+  0,44%           │  0x00007f62411b9f7f: mov    %r10d,0x20(%rdi)
+                  │  0x00007f62411b9f83: mov    %rdi,%rsi
+                  │  0x00007f62411b9f86: shr    $0x9,%rsi
+                  │  0x00007f62411b9f8a: movb   $0x0,(%rsi,%rbx,1)
+  0,44%           │  0x00007f62411b9f8e: lock addl $0x0,(%rsp)     ;*putfield L$2
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@92 (line 5)
+ 11,96%    2,11%  │  0x00007f62411b9f93: mov    $0x1,%esi
+                  │  0x00007f62411b9f98: mov    %esi,0x10(%rdi)
+                  │  0x00007f62411b9f9b: lock addl $0x0,(%rsp)     ;*putfield label
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@97 (line 5)
+  9,40%    0,78%  │  0x00007f62411b9fa0: mov    0x80(%rsp),%rbx
+                  │  0x00007f62411b9fa8: cmp    (%rbx),%rax        ;*invokevirtual yield
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@100 (line 5)
+                  │                                                ; implicit exception: dispatches to 0x00007f62411ba12c
+  0,06%           │  0x00007f62411b9fab: cmp    $0x0,%rdi
+                  │  0x00007f62411b9faf: je     0x00007f62411ba00f  ;*ifnonnull
+                  │                                                ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@1 (line 125)
+                  │                                                ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@100 (line 5)
+  0,54%           │  0x00007f62411b9fb5: mov    %rdi,%rsi
+                  │  0x00007f62411b9fb8: mov    %rbx,%rdi
+                  │  0x00007f62411b9fbb: jmpq   0x00007f62411ba041  ;*return
+                  │                                                ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@8 (line 128)
+                  │                                                ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                  │                                                ; - kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume@100 (line 5)
+                  ↘  0x00007f62411b9fc0: mov    0x70(%rsp),%rdx
+                     0x00007f62411b9fc5: mov    0x60(%rsp),%rdi
+....................................................................................................
+ 50,99%   27,37%  <total for region 1>
+
+....[Hottest Regions]...............................................................................
+ 50,99%   27,37%         C1, level 1  kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 (273 bytes) 
+  5,23%    7,02%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::hasNext, version 461 (183 bytes) 
+  4,48%    4,49%           [unknown]  [unknown] (0 bytes) 
+  3,29%    7,07%         C1, level 1  kotlin.collections.IntIterator::next, version 465 (79 bytes) 
+  3,29%    5,59%         C1, level 1  kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 (128 bytes) 
+  3,10%    5,76%         C1, level 1  java.lang.Integer::valueOf, version 449 (141 bytes) 
+  2,92%    3,70%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 476 (76 bytes) 
+  2,45%    5,21%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 467 (86 bytes) 
+  2,31%    3,99%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 173 (63 bytes) 
+  1,99%    5,08%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 459 (62 bytes) 
+  1,95%    3,99%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 472 (44 bytes) 
+  1,89%    3,49%         C1, level 1  java.lang.Integer::intValue, version 458 (58 bytes) 
+  1,82%    0,01%         C1, level 1  kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 (55 bytes) 
+  1,81%    3,51%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$3::invoke, version 477 (179 bytes) 
+  1,78%    0,02%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 471 (47 bytes) 
+  1,62%    2,89%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$1::invoke, version 468 (118 bytes) 
+  1,36%    0,02%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 471 (58 bytes) 
+  1,31%    2,37%         C1, level 1  kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 (58 bytes) 
+  0,94%    1,82%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$2::invoke, version 474 (79 bytes) 
+  0,76%    1,12%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$2::invoke, version 474 (15 bytes) 
+  4,70%    5,45%  <...other 342 warm regions...>
+....................................................................................................
+ 99,99%   99,99%  <totals>
+
+....[Hottest Methods (after inlining)]..............................................................
+ 57,41%   35,33%         C1, level 1  kotlinx.collections.experimental.sequences.OperationsKt$map_c$1::doResume, version 464 
+  5,83%    5,73%           [unknown]  [unknown] 
+  5,23%    7,02%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::hasNext, version 461 
+  3,29%    7,07%         C1, level 1  kotlin.collections.IntIterator::next, version 465 
+  3,15%    0,05%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 471 
+  3,10%    5,76%         C1, level 1  java.lang.Integer::valueOf, version 449 
+  2,92%    3,70%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 476 
+  2,53%    4,67%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 472 
+  2,45%    5,21%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 467 
+  2,31%    3,99%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 173 
+  2,24%    4,03%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$2::invoke, version 474 
+  2,10%    3,79%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$1::invoke, version 468 
+  1,99%    5,08%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 459 
+  1,89%    3,49%         C1, level 1  java.lang.Integer::intValue, version 458 
+  1,81%    3,51%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_c$sequence$3::invoke, version 477 
+  0,31%    0,22%           libjvm.so  SpinPause 
+  0,17%    0,21%           libjvm.so  ParallelTaskTerminator::offer_termination 
+  0,14%    0,21%           libjvm.so  StringTable::buckets_unlink_or_oops_do 
+  0,07%    0,02%           libjvm.so  xmlStream::write_text 
+  0,06%    0,01%           libjvm.so  PSScavengeKlassClosure::do_klass 
+  0,99%    0,55%  <...other 85 warm methods...>
+....................................................................................................
+ 99,99%   99,65%  <totals>
+
+....[Distribution by Source]........................................................................
+ 92,43%   92,71%         C1, level 1
+  5,83%    5,73%           [unknown]
+  1,33%    1,23%           libjvm.so
+  0,21%    0,26%        libc-2.19.so
+  0,07%    0,05%      hsdis-amd64.so
+  0,06%    0,02%  libpthread-2.19.so
+  0,06%    0,01%         interpreter
+....................................................................................................
+ 99,99%   99,99%  <totals>
+
+
+
+# JMH 1.13 (released 33 days ago)
+# VM version: JDK 1.8.0_101, VM 25.101-b13
+# VM invoker: /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/jre/bin/java
+# VM options: -XX:TieredStopAtLevel=1
+# Warmup: 6 iterations, 1 s each
+# Measurement: 20 iterations, 500 ms each
+# Timeout: 10 min per iteration
+# Threads: 1 thread, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations.map_ci
+
+# Run progress: 66,67% complete, ETA 00:00:18
+# Fork: 1 of 1
+# Preparing profilers: LinuxPerfAsmProfiler 
+# Profilers consume stdout and stderr from target VM, use -v EXTRA to copy to console
+# Warmup Iteration   1: 6121,471 us/op
+# Warmup Iteration   2: 5664,567 us/op
+# Warmup Iteration   3: 5719,796 us/op
+# Warmup Iteration   4: 5664,931 us/op
+# Warmup Iteration   5: 5678,453 us/op
+# Warmup Iteration   6: 5638,543 us/op
+Iteration   1: 5622,877 us/op
+Iteration   2: 5629,017 us/op
+Iteration   3: 5656,988 us/op
+Iteration   4: 5642,915 us/op
+Iteration   5: 5678,699 us/op
+Iteration   6: 5690,684 us/op
+Iteration   7: 5642,134 us/op
+Iteration   8: 5624,352 us/op
+Iteration   9: 5658,476 us/op
+Iteration  10: 5724,649 us/op
+Iteration  11: 5648,619 us/op
+Iteration  12: 5651,366 us/op
+Iteration  13: 5663,019 us/op
+Iteration  14: 5663,982 us/op
+Iteration  15: 5781,286 us/op
+Iteration  16: 5643,863 us/op
+Iteration  17: 5690,662 us/op
+Iteration  18: 5664,748 us/op
+Iteration  19: 5693,852 us/op
+Iteration  20: 5663,796 us/op
+# Processing profiler results: LinuxPerfAsmProfiler 
+
+
+Result "map_ci":
+  5666,799 ±(99.9%) 32,184 us/op [Average]
+  (min, avg, max) = (5622,877, 5666,799, 5781,286), stdev = 37,063
+  CI (99.9%): [5634,615, 5698,983] (assumes normal distribution)
+
+Secondary result "·asm":
+PrintAssembly processed: 121762 total address lines.
+Perf output processed (skipped 6,141 seconds):
+ Column 1: cycles (12458 events)
+ Column 2: instructions (12364 events)
+
+Hottest code regions (>10,00% "cycles" events):
+
+....[Hottest Region 1]..............................................................................
+C1, level 1, kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume, version 475 (202 bytes) 
+
+                     0x00007f19811c2f1c: xor    %rcx,%rcx
+                     0x00007f19811c2f1f: mov    %ecx,0xc(%rax)
+                     0x00007f19811c2f22: xor    %rcx,%rcx          ;*new  ; - java.lang.Integer::valueOf@23 (line 832)
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@81 (line 345)
+                     0x00007f19811c2f25: mov    %ebx,0xc(%rax)     ;*putfield value
+                                                                   ; - java.lang.Integer::&lt;init&gt;@6 (line 850)
+                                                                   ; - java.lang.Integer::valueOf@28 (line 832)
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@81 (line 345)
+                  ╭  0x00007f19811c2f28: jmpq   0x00007f19811c2f54  ;*astore
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@84 (line 345)
+  0,03%    0,02%  │  0x00007f19811c2f2d: add    $0x80,%ebx
+           0,01%  │  0x00007f19811c2f33: mov    $0x7191addc0,%rsi  ;   {oop(a &apos;java/lang/Integer&apos;[256] )}
+                  │  0x00007f19811c2f3d: movslq %ebx,%rdi
+  0,10%    0,17%  │  0x00007f19811c2f40: cmp    0xc(%rsi),%ebx     ; implicit exception: dispatches to 0x00007f19811c318f
+                  │  0x00007f19811c2f43: jae    0x00007f19811c3199
+           0,05%  │  0x00007f19811c2f49: mov    0x10(%rsi,%rdi,4),%esi
+  0,55%    0,90%  │  0x00007f19811c2f4d: shl    $0x3,%rsi          ;*aaload
+                  │                                                ; - java.lang.Integer::valueOf@21 (line 831)
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@81 (line 345)
+  0,15%    0,07%  │  0x00007f19811c2f51: mov    %rsi,%rax          ;*astore
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@84 (line 345)
+                  ↘  0x00007f19811c2f54: mov    0xa8(%rsp),%rcx
+                     0x00007f19811c2f5c: mov    0xa0(%rsp),%rsi
+  0,13%    0,19%     0x00007f19811c2f64: mov    0x90(%rsp),%rbx
+                     0x00007f19811c2f6c: mov    0x98(%rsp),%rdx
+                     0x00007f19811c2f74: mov    0x88(%rsp),%rdi
+                     0x00007f19811c2f7c: mov    %rsi,%r10
+  0,18%    0,06%     0x00007f19811c2f7f: shr    $0x3,%r10
+                     0x00007f19811c2f83: mov    %r10d,0x18(%rdi)
+                     0x00007f19811c2f87: mov    %rdi,%rsi
+                     0x00007f19811c2f8a: shr    $0x9,%rsi
+  0,13%    0,07%     0x00007f19811c2f8e: mov    $0x7f197d1ff000,%r8
+                     0x00007f19811c2f98: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c2f9d: lock addl $0x0,(%rsp)
+  2,82%    1,53%     0x00007f19811c2fa2: mov    %rbx,%r10
+                     0x00007f19811c2fa5: shr    $0x3,%r10
+                     0x00007f19811c2fa9: mov    %r10d,0x1c(%rdi)
+  0,11%              0x00007f19811c2fad: mov    %rdi,%rsi
+                     0x00007f19811c2fb0: shr    $0x9,%rsi
+                     0x00007f19811c2fb4: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c2fb9: lock addl $0x0,(%rsp)
+  3,27%    0,41%     0x00007f19811c2fbe: mov    %rdx,%r10
+                     0x00007f19811c2fc1: shr    $0x3,%r10
+                     0x00007f19811c2fc5: mov    %r10d,0x20(%rdi)
+  0,11%              0x00007f19811c2fc9: mov    %rdi,%rsi
+                     0x00007f19811c2fcc: shr    $0x9,%rsi
+                     0x00007f19811c2fd0: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c2fd5: lock addl $0x0,(%rsp)     ;*putfield L$2
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@105 (line 345)
+  3,19%    0,40%     0x00007f19811c2fda: mov    $0x1,%esi
+                     0x00007f19811c2fdf: mov    %esi,0x10(%rdi)
+                     0x00007f19811c2fe2: lock addl $0x0,(%rsp)     ;*putfield label
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@110 (line 345)
+  2,76%    0,23%     0x00007f19811c2fe7: cmp    (%rcx),%rax        ;*invokevirtual yield
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@113 (line 345)
+                                                                   ; implicit exception: dispatches to 0x00007f19811c31a2
+                     0x00007f19811c2fea: cmp    $0x0,%rdi
+                     0x00007f19811c2fee: je     0x00007f19811c305a  ;*ifnonnull
+                                                                   ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@1 (line 125)
+                                                                   ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@113 (line 345)
+                     0x00007f19811c2ff4: mov    %rdi,%rsi
+  0,16%              0x00007f19811c2ff7: mov    %rcx,%rdi
+                     0x00007f19811c2ffa: jmpq   0x00007f19811c308c  ;*return
+                                                                   ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@8 (line 128)
+                                                                   ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@113 (line 345)
+                     0x00007f19811c2fff: mov    0x98(%rsp),%rdx
+                     0x00007f19811c3007: mov    0x88(%rsp),%rdi
+                     0x00007f19811c300f: cmp    (%rdx),%rax        ;*invokevirtual handleResult
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume@165 (line 345)
+                                                                   ; implicit exception: dispatches to 0x00007f19811c31a7
+                     0x00007f19811c3012: cmp    $0x0,%rdi
+....................................................................................................
+ 13,71%    4,10%  <total for region 1>
+
+....[Hottest Region 2]..............................................................................
+C1, level 1, kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume, version 488 (202 bytes) 
+
+                     0x00007f19811c7d1c: xor    %rcx,%rcx
+                     0x00007f19811c7d1f: mov    %ecx,0xc(%rax)
+                     0x00007f19811c7d22: xor    %rcx,%rcx          ;*new  ; - java.lang.Integer::valueOf@23 (line 832)
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@81 (line 345)
+                     0x00007f19811c7d25: mov    %ebx,0xc(%rax)     ;*putfield value
+                                                                   ; - java.lang.Integer::&lt;init&gt;@6 (line 850)
+                                                                   ; - java.lang.Integer::valueOf@28 (line 832)
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@81 (line 345)
+                  ╭  0x00007f19811c7d28: jmpq   0x00007f19811c7d54  ;*astore
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@84 (line 345)
+  0,05%    0,11%  │  0x00007f19811c7d2d: add    $0x80,%ebx
+                  │  0x00007f19811c7d33: mov    $0x7191addc0,%rsi  ;   {oop(a &apos;java/lang/Integer&apos;[256] )}
+                  │  0x00007f19811c7d3d: movslq %ebx,%rdi
+  0,06%    0,16%  │  0x00007f19811c7d40: cmp    0xc(%rsi),%ebx     ; implicit exception: dispatches to 0x00007f19811c7f8f
+                  │  0x00007f19811c7d43: jae    0x00007f19811c7f99
+  0,07%    0,07%  │  0x00007f19811c7d49: mov    0x10(%rsi,%rdi,4),%esi
+  0,58%    0,77%  │  0x00007f19811c7d4d: shl    $0x3,%rsi          ;*aaload
+                  │                                                ; - java.lang.Integer::valueOf@21 (line 831)
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@81 (line 345)
+  0,08%    0,11%  │  0x00007f19811c7d51: mov    %rsi,%rax          ;*astore
+                  │                                                ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@84 (line 345)
+                  ↘  0x00007f19811c7d54: mov    0xa8(%rsp),%rcx
+                     0x00007f19811c7d5c: mov    0xa0(%rsp),%rsi
+  0,14%    0,16%     0x00007f19811c7d64: mov    0x90(%rsp),%rbx
+                     0x00007f19811c7d6c: mov    0x98(%rsp),%rdx
+                     0x00007f19811c7d74: mov    0x88(%rsp),%rdi
+                     0x00007f19811c7d7c: mov    %rsi,%r10
+  0,14%    0,05%     0x00007f19811c7d7f: shr    $0x3,%r10
+                     0x00007f19811c7d83: mov    %r10d,0x18(%rdi)
+                     0x00007f19811c7d87: mov    %rdi,%rsi
+                     0x00007f19811c7d8a: shr    $0x9,%rsi
+  0,25%    0,02%     0x00007f19811c7d8e: mov    $0x7f197d1ff000,%r8
+                     0x00007f19811c7d98: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c7d9d: lock addl $0x0,(%rsp)
+  2,54%    1,92%     0x00007f19811c7da2: mov    %rbx,%r10
+                     0x00007f19811c7da5: shr    $0x3,%r10
+                     0x00007f19811c7da9: mov    %r10d,0x1c(%rdi)
+  0,12%              0x00007f19811c7dad: mov    %rdi,%rsi
+                     0x00007f19811c7db0: shr    $0x9,%rsi
+                     0x00007f19811c7db4: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c7db9: lock addl $0x0,(%rsp)
+  3,17%    0,44%     0x00007f19811c7dbe: mov    %rdx,%r10
+                     0x00007f19811c7dc1: shr    $0x3,%r10
+  0,01%              0x00007f19811c7dc5: mov    %r10d,0x20(%rdi)
+  0,12%              0x00007f19811c7dc9: mov    %rdi,%rsi
+                     0x00007f19811c7dcc: shr    $0x9,%rsi
+                     0x00007f19811c7dd0: movb   $0x0,(%rsi,%r8,1)
+                     0x00007f19811c7dd5: lock addl $0x0,(%rsp)     ;*putfield L$2
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@105 (line 345)
+  3,66%    0,41%     0x00007f19811c7dda: mov    $0x1,%esi
+                     0x00007f19811c7ddf: mov    %esi,0x10(%rdi)
+                     0x00007f19811c7de2: lock addl $0x0,(%rsp)     ;*putfield label
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@110 (line 345)
+  2,40%    0,22%     0x00007f19811c7de7: cmp    (%rcx),%rax        ;*invokevirtual yield
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@113 (line 345)
+                                                                   ; implicit exception: dispatches to 0x00007f19811c7fa2
+                     0x00007f19811c7dea: cmp    $0x0,%rdi
+                     0x00007f19811c7dee: je     0x00007f19811c7e5a  ;*ifnonnull
+                                                                   ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@1 (line 125)
+                                                                   ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@113 (line 345)
+                     0x00007f19811c7df4: mov    %rdi,%rsi
+  0,14%              0x00007f19811c7df7: mov    %rcx,%rdi
+                     0x00007f19811c7dfa: jmpq   0x00007f19811c7e8c  ;*return
+                                                                   ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@8 (line 128)
+                                                                   ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@113 (line 345)
+                     0x00007f19811c7dff: mov    0x98(%rsp),%rdx
+                     0x00007f19811c7e07: mov    0x88(%rsp),%rdi
+                     0x00007f19811c7e0f: cmp    (%rdx),%rax        ;*invokevirtual handleResult
+                                                                   ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume@165 (line 345)
+                                                                   ; implicit exception: dispatches to 0x00007f19811c7fa7
+                     0x00007f19811c7e12: cmp    $0x0,%rdi
+....................................................................................................
+ 13,54%    4,44%  <total for region 2>
+
+....[Hottest Region 3]..............................................................................
+C1, level 1, kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume, version 490 (163 bytes) 
+
+                    0x00007f19811c9697: mov    $0x7191addc0,%rsi  ;   {oop(a &apos;java/lang/Integer&apos;[256] )}
+                    0x00007f19811c96a1: movslq %ebx,%rdi
+                    0x00007f19811c96a4: cmp    0xc(%rsi),%ebx     ; implicit exception: dispatches to 0x00007f19811c98f2
+                    0x00007f19811c96a7: jae    0x00007f19811c98fc
+                    0x00007f19811c96ad: mov    0x10(%rsi,%rdi,4),%esi
+                    0x00007f19811c96b1: shl    $0x3,%rsi          ;*aaload
+                                                                  ; - java.lang.Integer::valueOf@21 (line 831)
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@82 (line 345)
+                    0x00007f19811c96b5: mov    %rsi,%rax          ;*astore
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@85 (line 345)
+  0,01%    0,01%    0x00007f19811c96b8: mov    0xa8(%rsp),%rcx
+  0,14%    0,20%    0x00007f19811c96c0: mov    0xa0(%rsp),%rsi
+  0,01%    0,01%    0x00007f19811c96c8: mov    0x90(%rsp),%rbx
+  0,01%    0,01%    0x00007f19811c96d0: mov    0x98(%rsp),%rdx
+  0,10%    0,20%    0x00007f19811c96d8: mov    0x88(%rsp),%rdi
+                    0x00007f19811c96e0: mov    %rsi,%r10
+  0,01%    0,01%    0x00007f19811c96e3: shr    $0x3,%r10
+           0,01%    0x00007f19811c96e7: mov    %r10d,0x18(%rdi)
+  0,12%    0,24%    0x00007f19811c96eb: mov    %rdi,%rsi
+                    0x00007f19811c96ee: shr    $0x9,%rsi
+                    0x00007f19811c96f2: mov    $0x7f197d1ff000,%r8
+                    0x00007f19811c96fc: movb   $0x0,(%rsi,%r8,1)
+  0,11%    0,20%    0x00007f19811c9701: lock addl $0x0,(%rsp)
+  3,19%    4,10%    0x00007f19811c9706: mov    %rbx,%r10
+                    0x00007f19811c9709: shr    $0x3,%r10
+                    0x00007f19811c970d: mov    %r10d,0x1c(%rdi)
+  0,11%             0x00007f19811c9711: mov    %rdi,%rsi
+                    0x00007f19811c9714: shr    $0x9,%rsi
+                    0x00007f19811c9718: movb   $0x0,(%rsi,%r8,1)
+                    0x00007f19811c971d: lock addl $0x0,(%rsp)
+  3,40%    0,40%    0x00007f19811c9722: mov    %rdx,%r10
+                    0x00007f19811c9725: shr    $0x3,%r10
+                    0x00007f19811c9729: mov    %r10d,0x20(%rdi)
+  0,14%             0x00007f19811c972d: mov    %rdi,%rsi
+                    0x00007f19811c9730: shr    $0x9,%rsi
+                    0x00007f19811c9734: movb   $0x0,(%rsi,%r8,1)
+                    0x00007f19811c9739: lock addl $0x0,(%rsp)     ;*putfield L$2
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@106 (line 345)
+  3,40%    0,49%    0x00007f19811c973e: mov    $0x1,%esi
+                    0x00007f19811c9743: mov    %esi,0x10(%rdi)
+                    0x00007f19811c9746: lock addl $0x0,(%rsp)     ;*putfield label
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@111 (line 345)
+  2,60%    0,19%    0x00007f19811c974b: cmp    (%rcx),%rax        ;*invokevirtual yield
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@114 (line 345)
+                                                                  ; implicit exception: dispatches to 0x00007f19811c9905
+                    0x00007f19811c974e: cmp    $0x0,%rdi
+                    0x00007f19811c9752: je     0x00007f19811c97c2  ;*ifnonnull
+                                                                  ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@1 (line 125)
+                                                                  ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@114 (line 345)
+                    0x00007f19811c9758: mov    %rdi,%rsi
+  0,17%             0x00007f19811c975b: mov    %rcx,%rdi
+                    0x00007f19811c975e: jmpq   0x00007f19811c97f4  ;*return
+                                                                  ; - kotlin.jvm.internal.Intrinsics::checkParameterIsNotNull@8 (line 128)
+                                                                  ; - kotlinx.collections.experimental.sequences.GeneratorController::yield@3
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@114 (line 345)
+                    0x00007f19811c9763: mov    0x98(%rsp),%rdx
+                    0x00007f19811c976b: mov    0x88(%rsp),%rdi
+                    0x00007f19811c9773: cmp    (%rdx),%rax        ;*invokevirtual handleResult
+                                                                  ; - kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume@166 (line 345)
+                                                                  ; implicit exception: dispatches to 0x00007f19811c990a
+                    0x00007f19811c9776: cmp    $0x0,%rdi
+....................................................................................................
+ 13,52%    6,08%  <total for region 3>
+
+....[Hottest Region 4]..............................................................................
+C1, level 1, jdk.internal.org.objectweb.asm.Frame::get, version 179 (64 bytes) 
+
+                       0x00007f1981148078: add    %al,(%rax)
+                       0x00007f198114807a: add    %al,(%rax)
+                       0x00007f198114807c: add    %al,(%rax)
+                       0x00007f198114807e: add    %al,(%rax)
+                       0x00007f1981148080: add    %al,(%rax)
+                       0x00007f1981148082: add    %al,(%rax)
+                       0x00007f1981148084: add    %al,(%rax)
+                       0x00007f1981148086: add    %al,(%rax)
+                       0x00007f1981148088: add    %al,(%rax)
+                     Decoding VtableStub itbl[1]@12
+  0,43%    0,81%       0x00007f19811480a0: mov    0x8(%rsi),%r10d
+                       0x00007f19811480a4: shl    $0x3,%r10
+                       0x00007f19811480a8: mov    0x110(%r10),%r11d
+           0,01%       0x00007f19811480af: lea    0x1a8(%r10,%r11,8),%r11
+  0,35%    0,68%       0x00007f19811480b7: lea    0x8(%r10),%r10
+                       0x00007f19811480bb: mov    (%r11),%rbx
+  0,04%    0,02%       0x00007f19811480be: cmp    %rbx,%rax
+                  ╭    0x00007f19811480c1: je     0x00007f19811480d8
+  0,16%    0,13%  │ ↗  0x00007f19811480c3: test   %rbx,%rbx
+                  │╭│  0x00007f19811480c6: je     0x00007f19811480e3
+  9,31%   17,57%  │││  0x00007f19811480cc: add    $0x10,%r11
+                  │││  0x00007f19811480d0: mov    (%r11),%rbx
+  0,01%           │││  0x00007f19811480d3: cmp    %rbx,%rax
+                  ││╰  0x00007f19811480d6: jne    0x00007f19811480c3
+  0,02%           ↘│   0x00007f19811480d8: mov    0x8(%r11),%r11d
+  0,53%    0,95%   │   0x00007f19811480dc: mov    (%r10,%r11,1),%rbx
+  0,01%    0,01%   │   0x00007f19811480e0: jmpq   *0x40(%rbx)
+                   ↘   0x00007f19811480e3: jmpq   0x00007f1981057c20
+                       0x00007f19811480e8: add    %al,(%rax)
+                       0x00007f19811480ea: add    %al,(%rax)
+                       0x00007f19811480ec: add    %al,(%rax)
+                       0x00007f19811480ee: add    %al,(%rax)
+                       0x00007f19811480f0: add    %al,(%rax)
+                       0x00007f19811480f2: add    %al,(%rax)
+                       0x00007f19811480f4: add    %al,(%rax)
+                       0x00007f19811480f6: add    %al,(%rax)
+                       0x00007f19811480f8: add    %al,(%rax)
+....................................................................................................
+ 10,84%   20,18%  <total for region 4>
+
+....[Hottest Regions]...............................................................................
+ 13,71%    4,10%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume, version 475 (202 bytes) 
+ 13,54%    4,44%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume, version 488 (202 bytes) 
+ 13,52%    6,08%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume, version 490 (163 bytes) 
+ 10,84%   20,18%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 179 (64 bytes) 
+  5,25%    5,27%           [unknown]  [unknown] (2 bytes) 
+  4,84%    7,11%         C1, level 1  kotlin.collections.IntIterator::next, version 476 (75 bytes) 
+  3,71%    3,95%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::hasNext, version 483 (130 bytes) 
+  2,98%    4,30%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume, version 488 (208 bytes) 
+  2,75%    4,23%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume, version 475 (208 bytes) 
+  2,72%    4,29%         C1, level 1  java.lang.Integer::valueOf, version 458 (109 bytes) 
+  2,58%    5,62%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 478 (93 bytes) 
+  2,54%    2,98%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 486 (76 bytes) 
+  2,16%    4,76%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 470 (62 bytes) 
+  1,97%    2,63%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume, version 490 (253 bytes) 
+  1,61%    0,43%         C1, level 1  java.lang.Integer::intValue, version 469 (58 bytes) 
+  1,60%    2,81%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 481 (44 bytes) 
+  1,53%    0,01%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 485 (47 bytes) 
+  1,14%    0,83%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 485 (43 bytes) 
+  0,96%    2,46%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume, version 475 (119 bytes) 
+  0,75%    2,30%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume, version 490 (120 bytes) 
+  9,32%   11,23%  <...other 433 warm regions...>
+....................................................................................................
+ 99,99%   99,99%  <totals>
+
+....[Hottest Methods (after inlining)]..............................................................
+ 18,60%   11,84%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::doResume, version 475 
+ 18,17%   12,07%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::doResume, version 488 
+ 17,15%   12,05%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::doResume, version 490 
+ 10,84%   20,18%         C1, level 1  jdk.internal.org.objectweb.asm.Frame::get, version 179 
+  6,77%    6,59%           [unknown]  [unknown] 
+  4,84%    7,11%         C1, level 1  kotlin.collections.IntIterator::next, version 476 
+  3,71%    3,95%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::hasNext, version 483 
+  2,72%    4,29%         C1, level 1  java.lang.Integer::valueOf, version 458 
+  2,67%    0,84%         C1, level 1  kotlinx.collections.experimental.sequences.GeneratorController::next, version 485 
+  2,58%    5,62%         C1, level 1  kotlin.ranges.IntProgressionIterator::nextInt, version 478 
+  2,54%    2,98%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceBenchmarksBaseKt::consume, version 486 
+  2,16%    4,76%         C1, level 1  kotlin.ranges.IntProgressionIterator::hasNext, version 470 
+  2,00%    3,33%         C1, level 1  org.openjdk.jmh.infra.Blackhole::consume, version 481 
+  1,61%    0,43%         C1, level 1  java.lang.Integer::intValue, version 469 
+  0,47%    0,27%           libjvm.so  SpinPause 
+  0,43%    0,61%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$2::resume, version 487 
+  0,39%    0,69%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$3::resume, version 489 
+  0,33%    0,78%         C1, level 1  kotlinx.collections.experimental.sequences.benchmarks.SequenceCoroutineOperations$map_ci$$inlined$map_ci$1::resume, version 474 
+  0,20%    0,19%           libjvm.so  StringTable::buckets_unlink_or_oops_do 
+  0,18%    0,27%           libjvm.so  ParallelTaskTerminator::offer_termination 
+  1,64%    0,72%  <...other 116 warm methods...>
+....................................................................................................
+ 99,99%   99,56%  <totals>
+
+....[Distribution by Source]........................................................................
+ 90,74%   91,52%         C1, level 1
+  6,77%    6,59%           [unknown]
+  1,81%    1,54%           libjvm.so
+  0,38%    0,28%        libc-2.19.so
+  0,13%    0,03%  libpthread-2.19.so
+  0,08%    0,01%      hsdis-amd64.so
+  0,08%    0,02%         interpreter
+  0,01%                perf-1447.map
+....................................................................................................
+ 99,99%   99,99%  <totals>
+
+
+
+# Run complete. Total time: 00:00:55
+
+Benchmark                                Mode  Cnt     Score    Error  Units
+SequenceCoroutineOperations.map          avgt   20  1957,586 ± 11,036  us/op
+SequenceCoroutineOperations.map:·asm     avgt            NaN             ---
+SequenceCoroutineOperations.map_c        avgt   20  4910,360 ± 38,033  us/op
+SequenceCoroutineOperations.map_c:·asm   avgt            NaN             ---
+SequenceCoroutineOperations.map_ci       avgt   20  5666,799 ± 32,184  us/op
+SequenceCoroutineOperations.map_ci:·asm  avgt            NaN             ---

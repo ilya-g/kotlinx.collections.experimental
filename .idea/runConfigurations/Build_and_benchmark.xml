@@ -11,8 +11,7 @@
     <module name="kotlinx-collections-experimental-benchmarks" />
     <envs />
     <method>
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean install -pl :kotlinx-collections-experimental" />
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package -pl :kotlinx-collections-experimental-benchmarks" />
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="clean package" />
       <option name="Make" enabled="true" />
     </method>
   </configuration>

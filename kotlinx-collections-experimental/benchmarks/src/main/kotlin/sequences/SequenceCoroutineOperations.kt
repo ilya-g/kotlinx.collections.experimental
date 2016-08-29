@@ -37,17 +37,17 @@ open class SequenceCoroutineOperations : SequenceBenchmarksBase() {
     }
     @Benchmark fun map_c(blackhole: Blackhole) {
         val sequence = when (counter++ % 3) {
-            0 -> sequence.map { it % 3 }
-            1 -> sequence.map { it % 5 }
-            else -> sequence.map { it + 10 }
+            0 -> sequence.map_c { it % 3 }
+            1 -> sequence.map_c { it % 5 }
+            else -> sequence.map_c { it + 10 }
         }
-        sequence.map_c { it % 3 }.consume(blackhole)
+        sequence.consume(blackhole)
     }
     @Benchmark fun map_ci(blackhole: Blackhole) {
         val sequence = when (counter++ % 3) {
-            0 -> sequence.map { it % 3 }
-            1 -> sequence.map { it % 5 }
-            else -> sequence.map { it + 10 }
+            0 -> sequence.map_ci { it % 3 }
+            1 -> sequence.map_ci { it % 5 }
+            else -> sequence.map_ci { it + 10 }
         }
         sequence.consume(blackhole)
     }

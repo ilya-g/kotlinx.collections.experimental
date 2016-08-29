@@ -1,0 +1,26 @@
+Benchmark                                  Mode  Cnt     Score     Error  Units
+SequenceCoroutineOperations.filter_c       avgt   40  1059,422 ±  69,923  us/op
+SequenceCoroutineOperations.filter_ci      avgt   40   958,586 ±  48,644  us/op
+SequenceCoroutineOperations.filter_std     avgt   40   551,218 ±  55,920  us/op
+SequenceCoroutineOperations.map            avgt   40  1026,563 ±  81,039  us/op
+SequenceCoroutineOperations.map_c          avgt   40  2553,812 ± 149,169  us/op
+SequenceCoroutineOperations.map_ci         avgt   40  3539,328 ± 180,685  us/op
+
+
+Benchmark                                               Mode  Cnt     Score    Error  Units
+SequenceFilterFusionOperations.double_filter_fused      avgt   40   757,907 ± 35,183  us/op
+SequenceFilterFusionOperations.double_filter_std        avgt   40   857,082 ± 34,555  us/op
+SequenceFilterFusionOperations.double_filter_std_arr    avgt   40   916,064 ± 35,412  us/op
+SequenceFilterFusionOperations.single_filter_std        avgt   40   567,058 ± 25,695  us/op
+SequenceFilterFusionOperations.triple_filter_fused      avgt   40   901,365 ± 39,709  us/op
+SequenceFilterFusionOperations.triple_filter_std        avgt   40  1443,956 ± 54,817  us/op
+SequenceFilterFusionOperations.triple_filter_std_arr    avgt   40  1464,895 ± 59,980  us/op
+
+SequenceMapFusionOperations.map_map_fused               avgt   40   990,236 ± 57,329  us/op
+SequenceMapFusionOperations.map_map_std                 avgt   40  1221,049 ± 63,696  us/op
+
+SequenceMapFilterFusionOperations.map_filter_fused      avgt   40   741,804 ± 37,437  us/op
+SequenceMapFilterFusionOperations.map_filter_std        avgt   40   837,216 ± 60,400  us/op
+SequenceMapFilterFusionOperations.map_map_filter_fused  avgt   40  1038,219 ± 52,777  us/op
+SequenceMapFilterFusionOperations.map_map_filter_std    avgt   40  1465,781 ± 60,805  us/op
+
