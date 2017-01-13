@@ -2,46 +2,21 @@ package kotlinx.collections.experimental.grouping
 
 import java.util.stream.Collector
 import java.util.stream.Collectors
-import kotlin.jvm.internal.NonVolatileRef.IntRef
+import kotlin.jvm.internal.Ref.IntRef
 
-
-public interface Grouping<T, out K> {
-    fun elementIterator(): Iterator<T>
-    fun keySelector(element: T): K
-}
 
 // Should we provide specialized groupings: IntGrouping, LongGrouping, CharGrouping?
 
-public inline fun <T, K> Iterable<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun elementIterator(): Iterator<T> = this@groupingBy.iterator()
-    override fun keySelector(element: T): K = keySelector(element)
-}
-
-public inline fun <T, K> Sequence<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun elementIterator(): Iterator<T> = this@groupingBy.iterator()
-    override fun keySelector(element: T): K = keySelector(element)
-}
-
-public inline fun <T, K> Array<T>.groupingBy(crossinline keySelector: (T) -> K): Grouping<T, K> = object : Grouping<T, K> {
-    override fun elementIterator(): Iterator<T> = this@groupingBy.iterator()
-    override fun keySelector(element: T): K = keySelector(element)
-}
 
 public inline fun <K> IntArray.groupingBy(crossinline keySelector: (Int) -> K): Grouping<Int, K> = object : Grouping<Int, K> {
-    override fun elementIterator(): IntIterator = this@groupingBy.iterator()
-    override fun keySelector(element: Int): K = keySelector(element)
+    override fun sourceIterator(): IntIterator = this@groupingBy.iterator()
+    override fun keyOf(element: Int): K = keySelector(element)
 }
-
-public inline fun <K> CharSequence.groupingBy(crossinline keySelector: (Char) -> K): Grouping<Char, K> = object : Grouping<Char, K> {
-    override fun elementIterator(): CharIterator = this@groupingBy.iterator()
-    override fun keySelector(element: Char): K = keySelector(element)
-}
-
 
 public inline fun <T, K, R> Grouping<T, K>.aggregate(operation: (key: K, value: R?, element: T, first: Boolean) -> R): Map<K, R> {
     val result = mutableMapOf<K, R>()
-    for (e in this.elementIterator()) {
-        val key = keySelector(e)
+    for (e in this.sourceIterator()) {
+        val key = keyOf(e)
         val value = result[key]
         result[key] = operation(key, value, e, value == null && !result.containsKey(key))
     }
@@ -66,34 +41,34 @@ public inline fun <S, T : S, K> Grouping<T, K>.reduce(operation: (K, S, T) -> S)
             if (first) e else operation(key, value as S, e)
         }
 
-public /*inline*/ fun <T, K> Grouping<T, K>.countEach(): Map<K, Int> = fold(0) { acc, e -> acc + 1 }
+public /*inline*/ fun <T, K> Grouping<T, K>.eachCount(): Map<K, Int> = fold(0) { acc, e -> acc + 1 }
 
-public fun <T, K> Grouping<T,K>.countEachRef(): Map<K, Int> =
+public fun <T, K> Grouping<T,K>.eachCountRef(): Map<K, Int> =
         fold(
                 initialValueSelector = { k, e -> IntRef() },
                 operation = { k, acc, e -> acc.apply { element += 1 } })
         .mapValues { it.value.element }
 
-public fun <T, K> Grouping<T,K>.countEachRefInPlace(): Map<K, Int> =
+public fun <T, K> Grouping<T,K>.eachCountRefInPlace(): Map<K, Int> =
         fold(
                 initialValueSelector = { k, e -> IntRef() },
                 operation = { k, acc, e -> acc.apply { element += 1 } })
         .mapValuesInPlace { it.value.element }
 
-public /*inline*/ fun <K> Grouping<Int, K>.sumEach(): Map<K, Int> =
+public /*inline*/ fun <K> Grouping<Int, K>.eachSum(): Map<K, Int> =
         reduce { k, sum, e -> sum + e }
 
-public inline fun <T, K> Grouping<T, K>.sumEachBy(valueSelector: (T) -> Int): Map<K, Int> =
+public inline fun <T, K> Grouping<T, K>.eachSumOf(valueSelector: (T) -> Int): Map<K, Int> =
         fold(0) { acc, e -> acc + valueSelector(e)}
 
-public inline fun <T, K> Grouping<T, K>.sumEachByRef(valueSelector: (T) -> Int): Map<K, Int> =
+public inline fun <T, K> Grouping<T, K>.eachSumOfRef(valueSelector: (T) -> Int): Map<K, Int> =
         fold(
                 initialValueSelector = { k, e -> IntRef() },
                 operation = { k, acc, e -> acc.apply { element += valueSelector(e) } })
         .mapValues { it.value.element }
 
 @Suppress("NON_PUBLIC_CALL_FROM_PUBLIC_INLINE")
-public inline fun <T, K> Grouping<T, K>.sumEachByRefInPlace(valueSelector: (T) -> Int): Map<K, Int> =
+public inline fun <T, K> Grouping<T, K>.eachSumOfRefInPlace(valueSelector: (T) -> Int): Map<K, Int> =
         fold(
                 initialValueSelector = { k, e -> IntRef() },
                 operation = { k, acc, e -> acc.apply { element += valueSelector(e) } })
@@ -109,7 +84,7 @@ internal inline fun <K, V, R> Map<K, V>.mapValuesInPlace(f: (Map.Entry<K, V>) ->
 }
 
 
-public fun <T, K, R, A> Grouping<T, K>.collectEach(collector: Collector<in T, A, out R>) =
+public fun <T, K, R, A> Grouping<T, K>.eachCollect(collector: Collector<in T, A, out R>) =
     fold({ k, e -> collector.supplier().get() }, { k, acc, e -> acc.apply { collector.accumulator().accept(acc, e) }} )
         .mapValuesInPlace { collector.finisher().apply(it.value) }
 
@@ -122,22 +97,22 @@ fun main(args: Array<String>) {
     val countByChar = grouping.fold(0) { acc, e -> acc + 1 }
 
     val sumLengthByChar: Map<Char, Int> = grouping.aggregate { k, v, e, first -> (v ?: 0) + e.length }
-    val sumLengthByChar2 = grouping.sumEachBy { it.length }
+    val sumLengthByChar2 = grouping.eachSumOf { it.length }
     println(sumLengthByChar2)
 
-    val countByChar2 = values.groupingBy { it.first() }.countEach()
+    val countByChar2 = values.groupingBy { it.first() }.eachCount()
     println(countByChar2)
 
     println(grouping.reduce(Count))
     println(grouping.reduce(Sum.by { it.length }))
 
-    println(grouping.collectEach(Collectors.counting()))
-    println(grouping.collectEach(Collectors.groupingBy({ s: String -> s.length }, Collectors.counting())))
-    println(grouping.collectEach(Collectors.summarizingInt { it.length }))
+    println(grouping.eachCollect(Collectors.counting()))
+    println(grouping.eachCollect(Collectors.groupingBy({ s: String -> s.length }, Collectors.counting())))
+    println(grouping.eachCollect(Collectors.summarizingInt { it.length }))
 
 
     val joined = values.joinToString("")
-    val charFrequencies = joined.groupingBy { it }.countEach()
+    val charFrequencies = joined.groupingBy { it }.eachCount()
     println(charFrequencies.entries.sortedBy { it.key })
 }
 

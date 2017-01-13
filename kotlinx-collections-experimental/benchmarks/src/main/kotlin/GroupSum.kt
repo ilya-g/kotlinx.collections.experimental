@@ -26,7 +26,7 @@ open class GroupSum {
     fun sumGroup() = data.groupBySumBy(keySelector = {it.key}, valueSelector = {it.value})
 
     @Benchmark
-    fun sumGrouping() = data.groupingBy { it.key }.sumEachBy { it.value }
+    fun sumGrouping() = data.groupingBy { it.key }.eachSumOf { it.value }
 
     @Benchmark
     fun sumGroupingAtomic() = data.groupingBy { it.key }
@@ -34,10 +34,10 @@ open class GroupSum {
             .mapValues { it.value.get() }
 
     @Benchmark
-    fun sumGroupingRef() = data.groupingBy { it.key }.sumEachByRef { it.value }
+    fun sumGroupingRef() = data.groupingBy { it.key }.eachSumOfRef { it.value }
 
     @Benchmark
-    fun sumGroupingRefInPlace() = data.groupingBy { it.key }.sumEachByRefInPlace { it.value }
+    fun sumGroupingRefInPlace() = data.groupingBy { it.key }.eachSumOfRefInPlace { it.value }
 
     @Benchmark
     fun sumGroupingReducer() = data.groupingBy { it.key }.reduce(Sum.by { it.value })

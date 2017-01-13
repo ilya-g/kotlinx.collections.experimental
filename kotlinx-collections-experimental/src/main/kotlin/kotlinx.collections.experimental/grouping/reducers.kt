@@ -1,7 +1,7 @@
 package kotlinx.collections.experimental.grouping
 
 import java.util.*
-import kotlin.jvm.internal.NonVolatileRef.IntRef
+import kotlin.jvm.internal.Ref.IntRef
 
 
 typealias StepFunction<R, T> = (R, T) -> R

@@ -28,7 +28,7 @@ open class GroupCount {
     fun countGroup() = data.groupCountBy { it.key }
 
     @Benchmark
-    fun countGrouping() = data.groupingBy { it.key }.countEach()
+    fun countGrouping() = data.groupingBy { it.key }.eachCount()
 
     @Benchmark
     fun countGroupingAtomic() =
@@ -37,10 +37,10 @@ open class GroupCount {
                     .mapValues { it.value.get() }
 
     @Benchmark
-    fun countGroupingRef() = data.groupingBy { it.key }.countEachRef()
+    fun countGroupingRef() = data.groupingBy { it.key }.eachCountRef()
 
     @Benchmark
-    fun countGroupingRefInPlace() = data.groupingBy { it.key }.countEachRefInPlace()
+    fun countGroupingRefInPlace() = data.groupingBy { it.key }.eachCountRefInPlace()
 
     @Benchmark
     fun countGroupingReducer() = data.groupingBy { it.key }.reduce(Count)
@@ -49,7 +49,7 @@ open class GroupCount {
     fun countGroupingReducerRef() = data.groupingBy { it.key }.reduce(CountWithRef)
 
     @Benchmark
-    fun countGroupingCollector() = data.groupingBy { it.key }.collectEach(Collectors.counting())
+    fun countGroupingCollector() = data.groupingBy { it.key }.eachCollect(Collectors.counting())
 
 
 }
