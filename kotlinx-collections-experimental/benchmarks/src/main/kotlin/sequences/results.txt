@@ -24,3 +24,18 @@ SequenceMapFilterFusionOperations.map_filter_std        avgt   40   837,216 ± 6
 SequenceMapFilterFusionOperations.map_map_filter_fused  avgt   40  1038,219 ± 52,777  us/op
 SequenceMapFilterFusionOperations.map_map_filter_std    avgt   40  1465,781 ± 60,805  us/op
 
+
+SequenceBuilders#.baseLine      avgt   15  0,276 ± 0,002  us/op
+
+Benchmark                       Mode  Cnt  Score   Error  Units
+SequenceBuilders1.mixedYields   avgt   30  0,886 ± 0,005  us/op
+SequenceBuilders1.onlyYield     avgt   30  0,973 ± 0,005  us/op
+SequenceBuilders1.onlyYieldAll  avgt   30  0,586 ± 0,026  us/op
+
+SequenceBuilders2.mixedYields   avgt   30  0,853 ± 0,002  us/op
+SequenceBuilders2.onlyYield     avgt   30  0,965 ± 0,005  us/op
+SequenceBuilders2.onlyYieldAll  avgt   30  0,703 ± 0,008  us/op
+
+SequenceBuilders3.mixedYields   avgt   30  0,889 ± 0,004  us/op
+SequenceBuilders3.onlyYield     avgt   30  0,944 ± 0,005  us/op
+SequenceBuilders3.onlyYieldAll  avgt   30  0,836 ± 0,003  us/op

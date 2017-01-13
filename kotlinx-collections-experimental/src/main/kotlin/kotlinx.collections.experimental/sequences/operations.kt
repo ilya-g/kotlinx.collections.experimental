@@ -1,14 +1,15 @@
 package kotlinx.collections.experimental.sequences
+import kotlinx.collections.experimental.sequences.buildSequence1 as buildSequence
 
 public fun <T, R> Sequence<T>.map_c(transform: (T) -> R): Sequence<R> =
-        generate {
+        buildSequence {
             for (element in this@map_c) {
                 yield(transform(element))
             }
         }
 
 public inline fun <T, R> Sequence<T>.map_ci(crossinline transform: (T) -> R): Sequence<R> =
-        generate {
+        buildSequence {
             for (element in this@map_ci) {
                 yield(transform(element))
             }
@@ -16,7 +17,7 @@ public inline fun <T, R> Sequence<T>.map_ci(crossinline transform: (T) -> R): Se
 
 
 public fun <T> Sequence<T>.filter_c(predicate: (T) -> Boolean): Sequence<T> =
-        generate {
+        buildSequence {
             for (element in this@filter_c) {
 //            val iterator = this@filter_c.iterator()
 //            while (iterator.hasNext()) {
@@ -27,7 +28,7 @@ public fun <T> Sequence<T>.filter_c(predicate: (T) -> Boolean): Sequence<T> =
         }
 
 public inline fun <T> Sequence<T>.filter_ci(crossinline predicate: (T) -> Boolean): Sequence<T> =
-        generate {
+        buildSequence {
             val iterator = this@filter_ci.iterator()
             while (iterator.hasNext()) {
                 val element = iterator.next()

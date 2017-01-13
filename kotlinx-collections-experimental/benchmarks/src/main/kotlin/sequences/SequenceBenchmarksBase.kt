@@ -11,7 +11,7 @@ open class SequenceBenchmarksBase {
         (1..elements).asSequence(),   // Iterable.asSequence
         (0..elements).asSequence().drop(1),  // DropSequence
         Array(elements) { it + 1 }.asSequence()  // Array.asSequence
-    ).take(1)
+    ).take(3)
 
     private var seq_impl_id = 0
 
