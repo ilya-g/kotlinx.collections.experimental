@@ -212,34 +212,35 @@ internal class FilteringStdIteratorSequence<T>(private val sequence: Sequence<T>
 // some optimizations for AbstractIterator
 public abstract class AbstractIterator<T>: Iterator<T> {
     object States {
-        const val Failed = -2
-        const val NotReady = -1
+        const val Failed = -1
+        const val NotReady = 0
         const val Done = 1
-        const val Ready = 0
+        const val Ready = 2
     }
     private var state = States.NotReady
     private var nextValue: T? = null
 
     override fun hasNext(): Boolean {
         return when (state) {
-            -2 -> throw IllegalStateException("Iterator failed")
-            -1 -> tryToComputeNext()
-            1 -> false
-            0 -> true
-            else -> tryToComputeNext()
+            States.NotReady -> tryToComputeNext()
+            States.Done -> false
+            States.Ready -> true
+            else -> throw IllegalStateException("Iterator is in invalid state $state")
         }
     }
 
     override fun next(): T {
         if (!hasNext()) throw NoSuchElementException()
         state = States.NotReady
-        return nextValue as T
+        val result = nextValue as T
+        nextValue = null
+        return result
     }
 
     private fun tryToComputeNext(): Boolean {
         state = States.Failed
         computeNext()
-        return state == 0
+        return state == States.Ready
     }
 
     /**
@@ -259,14 +260,14 @@ public abstract class AbstractIterator<T>: Iterator<T> {
      */
     protected fun setNext(value: T): Unit {
         nextValue = value
-        state = 0
+        state = States.Ready
     }
 
     /**
      * Sets the state to done so that the iteration terminates.
      */
     protected fun done() {
-        state = 1
+        state = States.Done
     }
 }
 
