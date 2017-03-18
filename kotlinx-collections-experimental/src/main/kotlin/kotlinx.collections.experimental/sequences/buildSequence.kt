@@ -1,7 +1,8 @@
 @file:Suppress("EXPERIMENTAL_FEATURE_WARNING")
 package kotlinx.collections.experimental.sequences
 
-import kotlin.coroutines.*
+import kotlin.coroutines.experimental.*
+import kotlin.coroutines.experimental.intrinsics.*
 
 /**
  *  Builds a [Sequence] lazily yielding values one by one.
@@ -43,7 +44,6 @@ public abstract class SequenceBuilder<in T> internal constructor() {
 }
 
 
-
 internal fun <T> buildIteratorImpl(builderAction: suspend SequenceBuilder<T>.() -> Unit): Iterator<T> {
     val iterator = YieldingIterator<T>()
     iterator.nextStep = builderAction.createCoroutine(receiver = iterator, completion = iterator)
@@ -73,7 +73,7 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
                     if (nextIterator!!.hasNext()) return true else nextIterator = null
                 State_Done -> return false
                 State_Ready -> return true
-                else -> throw unexpectedState()
+                else -> throw exceptionalState()
             }
 
             state = State_Failed
@@ -83,33 +83,38 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
         }
     }
 
-    override tailrec fun next(): T {
+    override fun next(): T {
         when (state) {
-            State_NotReady -> if (!hasNext()) throw NoSuchElementException() else return next()
-            State_ManyReady -> {
-                val iterator = nextIterator!!
-                return iterator.next()
-            }
+            State_NotReady -> return nextNotReady()
+            State_ManyReady -> return nextIterator!!.next()
             State_Ready -> {
                 state = State_NotReady
                 val result = nextValue as T
                 nextValue = null
                 return result
             }
-            State_Done -> throw NoSuchElementException()
-            else -> throw unexpectedState()
+            else -> throw exceptionalState()
         }
     }
 
-    private fun unexpectedState(): Throwable = IllegalStateException("Unexpected state of the iterator: $state")
+    private fun nextNotReady(): T {
+        if (!hasNext()) throw NoSuchElementException() else return next()
+    }
+
+    private fun exceptionalState(): Throwable = when (state) {
+        State_Done -> NoSuchElementException()
+        State_Failed -> IllegalStateException("Iterator has failed.")
+        else -> IllegalStateException("Unexpected state of the iterator: $state")
+    }
+
 
 
     suspend override fun yield(value: T) {
         nextValue = value
         state = State_Ready
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = c
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 
@@ -117,9 +122,9 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
         if (!iterator.hasNext()) return
         nextIterator = iterator
         state = State_ManyReady
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = c
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 
@@ -131,6 +136,8 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
     override fun resumeWithException(exception: Throwable) {
         throw exception // just rethrow
     }
+
+    override val context: CoroutineContext get() = EmptyCoroutineContext
 }
 
 
@@ -142,7 +149,7 @@ public fun <T> buildSequence2(block: suspend SequenceBuilder<T>.() -> Unit): Seq
     }
 }
 
-private class GeneratorIteratorActual<T>: SequenceBuilder<T>(), Iterator<T>, Continuation<Unit> {
+private class GeneratorIteratorActual<T> : SequenceBuilder<T>(), Iterator<T>, Continuation<Unit> {
     var nextStep: Continuation<Unit>? = null
     private var computedNext = false
     private var nextIterator: Iterator<T>? = null
@@ -183,12 +190,14 @@ private class GeneratorIteratorActual<T>: SequenceBuilder<T>(), Iterator<T>, Con
         throw exception // just rethrow
     }
 
+    override val context: CoroutineContext get() = EmptyCoroutineContext
+
     // Generator implementation
     override suspend fun yield(value: T) {
         nextValue = value
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = c
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 
@@ -196,9 +205,9 @@ private class GeneratorIteratorActual<T>: SequenceBuilder<T>(), Iterator<T>, Con
         if (!iterator.hasNext()) return // no values -- don't suspend
         nextValue = iterator.next()
         nextIterator = iterator
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = c
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 }
@@ -214,7 +223,7 @@ public fun <T> buildSequence3(block: suspend SequenceBuilder<T>.() -> Unit): Seq
     }
 }
 
-private class GeneratorIteratorOriginal<T>: SequenceBuilder<T>(), Iterator<T>, Continuation<Unit> {
+private class GeneratorIteratorOriginal<T> : SequenceBuilder<T>(), Iterator<T>, Continuation<Unit> {
     var computedNext = false
     var nextStep: Continuation<Unit>? = null
     var nextValue: T? = null
@@ -244,21 +253,23 @@ private class GeneratorIteratorOriginal<T>: SequenceBuilder<T>(), Iterator<T>, C
         throw exception // just rethrow
     }
 
+    override val context: CoroutineContext get() = EmptyCoroutineContext
+
     // Generator implementation
     override suspend fun yield(value: T) {
         nextValue = value
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = c
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 
     override suspend fun yieldAll(iterator: Iterator<T>) {
         if (!iterator.hasNext()) return // no values -- don't suspend
         nextValue = iterator.next()
-        return CoroutineIntrinsics.suspendCoroutineOrReturn { c ->
+        return suspendCoroutineOrReturn { c ->
             nextStep = IteratorContinuation(c, iterator)
-            CoroutineIntrinsics.SUSPENDED
+            COROUTINE_SUSPENDED
         }
     }
 
@@ -275,5 +286,7 @@ private class GeneratorIteratorOriginal<T>: SequenceBuilder<T>(), Iterator<T>, C
         override fun resumeWithException(exception: Throwable) {
             throw exception // just rethrow
         }
+
+        override val context: CoroutineContext get() = this@GeneratorIteratorOriginal.context
     }
 }
