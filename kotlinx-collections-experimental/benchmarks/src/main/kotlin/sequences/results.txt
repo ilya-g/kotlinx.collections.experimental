@@ -28,9 +28,9 @@ SequenceMapFilterFusionOperations.map_map_filter_std    avgt   40  1465,781 ± 6
 SequenceBuilders#.baseLine      avgt   15  0,276 ± 0,002  us/op
 
 Benchmark                       Mode  Cnt  Score   Error  Units
-SequenceBuilders1.mixedYields   avgt   30  0,886 ± 0,005  us/op
-SequenceBuilders1.onlyYield     avgt   30  0,973 ± 0,005  us/op
-SequenceBuilders1.onlyYieldAll  avgt   30  0,586 ± 0,026  us/op
+SequenceBuilders1.mixedYields   avgt   30  0,878 ± 0,003  us/op
+SequenceBuilders1.onlyYield     avgt   30  1,017 ± 0,004  us/op
+SequenceBuilders1.onlyYieldAll  avgt   30  0,513 ± 0,002  us/op
 
 SequenceBuilders2.mixedYields   avgt   30  0,853 ± 0,002  us/op
 SequenceBuilders2.onlyYield     avgt   30  0,965 ± 0,005  us/op

@@ -53,10 +53,12 @@ internal fun <T> buildIteratorImpl(builderAction: suspend SequenceBuilder<T>.() 
 
 private typealias State = Int
 private const val State_NotReady: State = 0
-private const val State_ManyReady: State = 1
-private const val State_Ready: State = 2
-private const val State_Done: State = 3
-private const val State_Failed: State = 4
+private const val State_ManyNotReady: State = 2
+private const val State_ManyReady: State = 3
+private const val State_Ready: State = 1
+private const val State_Done: State = 4
+private const val State_Failed: State = 5
+
 
 
 private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuation<Unit> {
@@ -69,10 +71,15 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
         while (true) {
             when (state) {
                 State_NotReady -> {}
-                State_ManyReady ->
-                    if (nextIterator!!.hasNext()) return true else nextIterator = null
+                State_ManyNotReady ->
+                    if (nextIterator!!.hasNext()) {
+                        state = State_ManyReady
+                        return true
+                    } else {
+                        nextIterator = null
+                    }
                 State_Done -> return false
-                State_Ready -> return true
+                State_Ready, State_ManyReady -> return true
                 else -> throw exceptionalState()
             }
 
@@ -85,8 +92,11 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
 
     override fun next(): T {
         when (state) {
-            State_NotReady -> return nextNotReady()
-            State_ManyReady -> return nextIterator!!.next()
+            State_NotReady, State_ManyNotReady -> return nextNotReady()
+            State_ManyReady -> {
+                state = State_ManyNotReady
+                return nextIterator!!.next()
+            }
             State_Ready -> {
                 state = State_NotReady
                 val result = nextValue as T
@@ -106,7 +116,6 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
         State_Failed -> IllegalStateException("Iterator has failed.")
         else -> IllegalStateException("Unexpected state of the iterator: $state")
     }
-
 
 
     suspend override fun yield(value: T) {
@@ -137,7 +146,8 @@ private class YieldingIterator<T> : SequenceBuilder<T>(), Iterator<T>, Continuat
         throw exception // just rethrow
     }
 
-    override val context: CoroutineContext get() = EmptyCoroutineContext
+    override val context: CoroutineContext
+        get() = EmptyCoroutineContext
 }
 
 
